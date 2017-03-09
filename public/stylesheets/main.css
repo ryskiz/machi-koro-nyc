@@ -4,7 +4,7 @@
 
 .itemcontainer {
     width: 150px;
-    height: 250px;
+    height: 300px;
     margin-left: 20px;
     margin-right: 20px;
     padding: 10px 10px 10px 10px;
@@ -16,4 +16,10 @@
 
 .itemcontainerdesc{
     height: 30%;
+}
+
+#parent {
+  background-image: url(http://idwgames.com/wp-content/uploads/2014/09/machi-koro.jpg);
+  background-size: cover;
+  background-position: top right;
 }

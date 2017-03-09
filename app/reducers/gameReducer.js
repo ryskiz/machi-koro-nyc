@@ -1,3 +1,5 @@
+import {startingEstablishments} from '../basestuff'
+
 //Constants
 
 const RECEIVE_PLAYER = 'RECEIVE_PLAYER'
@@ -35,7 +37,7 @@ const endGame = () => ({
 
 const initialState = {
   players: [],
-  cardsOnField: [],
+  cardsOnField: establishments,
   currentRoller: null,
   gameWon: false
 }

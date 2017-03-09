@@ -49,286 +49,176 @@ export function trainStationEffect(player) {
     };
 }
 
-export const establishments = [
-
+export const startingEstablishments = [
 	{
-
 		title: 'Wheat Field (Halal Cart)',
-    id: 1,
+    id: 0,
 		subtitle: "Get 1 coin from the bank, on anyone's turn.",
     type: 'Wheat Field',
 		count: 6,
 		cost: 1,
 		active: [1],
 		spawn: 1,
-		// priority: CARD_PRIORITIES.BLUE,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 1,
-		// 		source: SOURCES.BANK,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Ranch (Pizzeria)',
-    id: 2,
+    id: 1,
 		subtitle: "Get 1 coin from the bank, on anyone's turn.",
     type: 'Ranch',
 		count: 6,
 		cost: 1,
 		active: [2],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.BLUE,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 1,
-		// 		source: SOURCES.BANK,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Bakery (Corner Bodega)',
-    id: 3,
+    id: 2,
 		subtitle: 'Get 1 coin from the bank, on your turn only.',
     type: 'Bakery',
 		count: 6,
 		cost: 1,
 		active: [2, 3],
 		spawn: 1,
-		// priority: CARD_PRIORITIES.GREEN,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 1,
-		// 		source: SOURCES.BANK,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Café (Dive Bar)',
-    id: 4,
+    id: 3,
 		subtitle: 'Get 1 coin from the player who rolled the dice.',
     type: 'Cafe',
 		count: 6,
 		cost: 2,
 		active: [3],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.RED,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 1,
-		// 		source: SOURCES.ROLLER,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Convenience Store (Duane Reade)',
-    id: 5,
+    id: 4,
 		subtitle: 'Get 3 coins from the bank, on your turn only.',
     type: 'Convenience Store',
 		count: 6,
 		cost: 2,
 		active: [4],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.GREEN,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 3,
-		// 		source: SOURCES.BANK,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Forest (Studio Apartment)',
-    id: 6,
+    id: 5,
 		subtitle: "Get 1 coin from the bank, on anyone's turn.",
     type: 'Forest',
 		count: 6,
 		cost: 3,
 		active: [5],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.BLUE,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 1,
-		// 		source: SOURCES.BANK,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Business Center (Leasing Office)',
-    id: 7,
+    id: 6,
 		subtitle: 'Trade one non-TOWER establishment with another player, on your turn only.',
     type: 'Business Center',
 		count: 4,
 		cost: 8,
 		active: [6],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.PURPLE,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.TRADE,
-		// 		count: 1,
-		// 		source: SOURCES.CHOICE,
-		// 	},
-		// ],
+    quantity: 4
 	},
 	{
 		title: 'Stadium (New Venture)',
-    id: 8,
+    id: 7,
 		subtitle: 'Get 2 coins from all players, on your turn only.',
     type: 'Stadium',
 		count: 4,
 		cost: 6,
 		active: [6],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.PURPLE,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 2,
-		// 		source: SOURCES.ALL,
-		// 	},
-		// ],
+    quantity: 4
 	},
 	{
 		title: 'TV Station (Hedge Fund)',
-    id: 9,
+    id: 8,
 		subtitle: 'Take 5 coins from any one player, on your turn only.',
     type: 'TV Station',
 		count: 4,
 		cost: 7,
 		active: [6],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.PURPLE,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 5,
-		// 		source: SOURCES.CHOICE,
-		// 	},
-		// ],
+    quantity: 4
 	},
 	{
 		title: 'Cheese Factory (5-Star Restaurant)',
-    id: 10,
+    id: 9,
 		subtitle: 'Get 3 coins from the bank for each CATTLE establishment that you own, on your turn only.',
     type: 'Cheese Factory',
 		count: 6,
 		cost: 5,
 		active: [7],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.GREEN,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 3,
-		// 		source: SOURCES.BANK,
-		// 		multiplier: ESTABLISHMENT_TYPES.CATTLE,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Furniture Factory (Apartment Building)',
-    id: 11,
+    id: 10,
 		subtitle: 'Get 3 coins from the bank for each FACTORY establishment that you own, on your turn only.',
     type: 'Furniture Factory',
 		count: 6,
 		cost: 3,
 		active: [8],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.GREEN,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 3,
-		// 		source: SOURCES.BANK,
-		// 		multiplier: ESTABLISHMENT_TYPES.FACTORY,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Mine (Brownstone Apartment)',
-    id: 12,
+    id: 11,
 		subtitle: "Get 5 coins from the bank, on anyone's turn.",
     type: 'Mine',
 		count: 6,
 		cost: 6,
 		active: [9],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.BLUE,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 5,
-		// 		source: SOURCES.BANK,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Family Restaurant (Nightclub)',
-    id: 13,
+    id: 12,
 		subtitle: 'Get 2 coins from the player who rolled the dice.',
     type: 'Family Restaurant',
 		count: 6,
 		cost: 3,
 		active: [9, 10],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.RED,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 2,
-		// 		source: SOURCES.ROLLER,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Apple Orchard (Metro Stop)',
-    id: 14,
+    id: 13,
 		subtitle: "Get 3 coins from the bank, on anyone's turn.",
     type: 'Apple Orchard',
 		count: 6,
 		cost: 3,
 		active: [10],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.BLUE,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 3,
-		// 		source: SOURCES.BANK,
-		// 	},
-		// ],
+    quantity: 6
 	},
 	{
 		title: 'Fruit and Vegetable Market (Whole Foods)',
-    id: 15,
+    id: 14,
 		subtitle: 'Get 2 coins from the bank for each GRAIN establishment that you own, on your turn only.',
     type: 'Fruit and Vegetable Market',
 		count: 6,
 		cost: 2,
 		active: [11, 12],
 		spawn: 0,
-		// priority: CARD_PRIORITIES.GREEN,
-		// actions: [
-		// 	{
-		// 		type: ACTIONS.INCOME,
-		// 		count: 2,
-		// 		source: SOURCES.BANK,
-		// 		multiplier: ESTABLISHMENT_TYPES.GRAIN,
-		// 	},
-		// ],
-	},
-
+    quantity: 6
+	}
 ];
 export const landmarks = [
     {
+        id: 0,
         title: 'Train Station (Penn Station)',
         subtitle: 'You may roll 1 or 2 dice.',
         cost: 4,
@@ -336,6 +226,7 @@ export const landmarks = [
         built: false,
     },
     {
+        id: 1,
         title: 'Shopping Mall (Times Square)',
         subtitle: 'Each of your COFFEE and GOODS establishments earn +1 coin.',
         cost: 10,
@@ -343,6 +234,7 @@ export const landmarks = [
         built: false,
     },
     {
+        id: 2,
         title: 'Amusement Park (Central Park)',
         subtitle: 'If you roll doubles, take another turn after this one.',
         cost: 16,
@@ -350,6 +242,7 @@ export const landmarks = [
         built: false,
     },
     {
+        id: 3,
         title: 'Radio Tower (Freedom Tower)',
         subtitle: 'Once every turn, you can choose to re-roll your dice.',
         cost: 22,
@@ -358,12 +251,8 @@ export const landmarks = [
     },
 ];
 
-import assert from 'assert';
-import uuid from 'node-uuid';
 
 
-
-const generateId = uuid.v4;
 
 export function createGame(name = 'Unnamed Game') {
     const establishments = [];
@@ -502,7 +391,4 @@ export function purchaseEstablishment(game, {playerId, establishmentId}) {
             updatedPlayer,
         ],
     };
-}
-
-export default function app() {
 }

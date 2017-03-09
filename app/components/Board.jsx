@@ -1,12 +1,13 @@
 import React from 'react'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
-import { establishments } from '../basestuff'
+import { startingEstablishments } from '../basestuff'
 
 class Board extends React.Component {
   constructor(props){
     super(props)
     this.state = {
+
     }
   }
   render(){
@@ -28,12 +29,17 @@ class Board extends React.Component {
                         <Link to={'/items/' + item.id + '/reviews'}>{item.title}</Link>
                       </span>
                     </h4>
-                    <div id="itemDetails">
-                      {item.brand}
+
+                    <div>
+                      Item Cost: { item.cost }
                     </div>
-                    <div id="itemPrice">
-                      {item.quantity > 0 ? <small>${item.price}</small> : <strong className="text-danger" >Out of Stock</strong>}
+                    <div id="">
+                      Quantity: {item.quantity}
                     </div>
+                    <div id="">
+                    {item.subtitle}
+                    </div>
+
                   </div>
                 </div>
               </div>
