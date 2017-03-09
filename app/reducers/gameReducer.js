@@ -37,7 +37,7 @@ const endGame = () => ({
 
 const initialState = {
   players: [],
-  cardsOnField: establishments,
+  cardsOnField: startingEstablishments,
   currentRoller: null,
   gameWon: false
 }

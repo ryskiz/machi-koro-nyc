@@ -11,7 +11,7 @@ class Board extends React.Component {
     }
   }
   render(){
-    const items = [...establishments]
+    const items = [...startingEstablishments]
     return (
       <div className="container">
         <div className="row">
@@ -20,11 +20,13 @@ class Board extends React.Component {
           <div className="row">
             {items && items.map(item => (
               <div className="col-md-2 well itemcontainer" key={item.type}>
-                <Link className="img-thumbnail itemcontainerthumbnail" to={'/items/' + item.id + '/reviews'}>
-                </Link>
+
                 <div className="">
                   <div className="itemcontainernamecont">
                     <h4 >
+                      <div>
+                        {item.cost}
+                      </div>
                       <span>
                         <Link to={'/items/' + item.id + '/reviews'}>{item.title}</Link>
                       </span>

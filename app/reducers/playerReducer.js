@@ -1,4 +1,4 @@
-import { landmarks, establishments } from 'basestuff'
+import { landmarks, startingEstablishments } from 'basestuff'
 
 
 ///////////////////////////////////////
@@ -11,6 +11,7 @@ const ROLL_DICE = 'ROLL_DICE';
 const STEAL_CARD = 'STEAL_CARD';
 const ACTIVATE_LANDMARK = 'ACTIVATE_LANDMARK';
 const TOGGLE_MONEY = 'TOGGLE_MONEY';
+const PLAYER_TURN = 'PLAYER_TURN;'
 
 const initialHand = [
 	{
@@ -211,6 +212,10 @@ const toggleMoney = (amount) =>({
   amount
 })
 
+const playerTurn = () => ({
+  type: PLAYER_TURN
+})
+
 //////////////////////////////////////////////
 ////////////////////reducer///////////////////
 //////////////////////////////////////////////
@@ -219,7 +224,8 @@ const initialState = {
     wallet: 3,
     canRollTwo: false,
     landmarks: landmarks,
-    cardsInPossession:[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
+    cardsInPossession: initialHand,
+    isTurn: false
 };
 
 
@@ -243,6 +249,9 @@ export default function (state = initialState, action) {
             break;
         case ACTIVATE_LANDMARK:
             newState.landmarks[action.landmarkId].built = true;
+            break;
+        case PLAYER_TURN:
+            newState.isTurn = true;
             break;
         default:
             return state
