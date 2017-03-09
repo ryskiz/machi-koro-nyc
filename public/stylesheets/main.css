@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+}
+
+.itemcontainer {
+    width: 150px;
+    height: 250px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px 10px 10px 10px;
+    box-shadow:6px 6px 1px darkgrey;
+    background-color: #d0d0e1;
+}
+
+
+
+.itemcontainerdesc{
+    height: 30%;
+}
