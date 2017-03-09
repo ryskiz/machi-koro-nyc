@@ -54,7 +54,7 @@ export function trainStationEffect(player) {
 
 export const establishments = [
 	{
-		title: 'Wheat Field',
+		title: 'Wheat Field (Halal Cart)',
 		subtitle: "Get 1 coin from the bank, on anyone's turn.",
 		type: ESTABLISHMENT_TYPES.GRAIN,
 		count: 6,
@@ -71,7 +71,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Ranch',
+		title: 'Ranch (Pizzeria)',
 		subtitle: "Get 1 coin from the bank, on anyone's turn.",
 		type: ESTABLISHMENT_TYPES.CATTLE,
 		count: 6,
@@ -88,7 +88,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Bakery',
+		title: 'Bakery (Corner Bodega)',
 		subtitle: 'Get 1 coin from the bank, on your turn only.',
 		type: ESTABLISHMENT_TYPES.GOODS,
 		count: 6,
@@ -105,7 +105,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Café',
+		title: 'Café (Dive Bar)',
 		subtitle: 'Get 1 coin from the player who rolled the dice.',
 		type: ESTABLISHMENT_TYPES.COFFEE,
 		count: 6,
@@ -122,7 +122,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Convenience Store',
+		title: 'Convenience Store (Duane Reade)',
 		subtitle: 'Get 3 coins from the bank, on your turn only.',
 		type: ESTABLISHMENT_TYPES.GOODS,
 		count: 6,
@@ -139,7 +139,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Forest',
+		title: 'Forest (Studio Apartment)',
 		subtitle: "Get 1 coin from the bank, on anyone's turn.",
 		type: ESTABLISHMENT_TYPES.FACTORY,
 		count: 6,
@@ -156,7 +156,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Business Center',
+		title: 'Business Center (Leasing Office)',
 		subtitle: 'Trade one non-TOWER establishment with another player, on your turn only.',
 		type: ESTABLISHMENT_TYPES.TOWER,
 		count: 4,
@@ -173,7 +173,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Stadium',
+		title: 'Stadium (New Venture)',
 		subtitle: 'Get 2 coins from all players, on your turn only.',
 		type: ESTABLISHMENT_TYPES.TOWER,
 		count: 4,
@@ -190,7 +190,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'TV Station',
+		title: 'TV Station (Hedge Fund)',
 		subtitle: 'Take 5 coins from any one player, on your turn only.',
 		type: ESTABLISHMENT_TYPES.TOWER,
 		count: 4,
@@ -207,7 +207,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Cheese Factory',
+		title: 'Cheese Factory (5-Star Restaurant)',
 		subtitle: 'Get 3 coins from the bank for each CATTLE establishment that you own, on your turn only.',
 		type: ESTABLISHMENT_TYPES.PROCESSED,
 		count: 6,
@@ -225,7 +225,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Furniture Factory',
+		title: 'Furniture Factory (Apartment Building)',
 		subtitle: 'Get 3 coins from the bank for each FACTORY establishment that you own, on your turn only.',
 		type: ESTABLISHMENT_TYPES.PROCESSED,
 		count: 6,
@@ -243,7 +243,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Mine',
+		title: 'Mine (Brownstone Apartment)',
 		subtitle: "Get 5 coins from the bank, on anyone's turn.",
 		type: ESTABLISHMENT_TYPES.FACTORY,
 		count: 6,
@@ -260,7 +260,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Family Restaurant',
+		title: 'Family Restaurant (Nightclub)',
 		subtitle: 'Get 2 coins from the player who rolled the dice.',
 		type: ESTABLISHMENT_TYPES.COFFEE,
 		count: 6,
@@ -277,7 +277,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Apple Orchard',
+		title: 'Apple Orchard (Metro Stop)',
 		subtitle: "Get 3 coins from the bank, on anyone's turn.",
 		type: ESTABLISHMENT_TYPES.GRAIN,
 		count: 6,
@@ -294,7 +294,7 @@ export const establishments = [
 		],
 	},
 	{
-		title: 'Fruit and Vegetable Market',
+		title: 'Fruit and Vegetable Market (Whole Foods)',
 		subtitle: 'Get 2 coins from the bank for each GRAIN establishment that you own, on your turn only.',
 		type: ESTABLISHMENT_TYPES.MARKET,
 		count: 6,
@@ -314,28 +314,28 @@ export const establishments = [
 ];
 export const landmarks = [
 	{
-		title: 'Train Station',
+		title: 'Train Station (Penn Station)',
 		subtitle: 'You may roll 1 or 2 dice.',
 		cost: 4,
 		effect: 'trainStationEffect',
 		built: false,
 	},
 	{
-		title: 'Shopping Mall',
+		title: 'Shopping Mall (Times Square)',
 		subtitle: 'Each of your COFFEE and GOODS establishments earn +1 coin.',
 		cost: 10,
 		effect: 'shoppingMallEffect',
 		built: false,
 	},
 	{
-		title: 'Amusement Park',
+		title: 'Amusement Park (Central Park)',
 		subtitle: 'If you roll doubles, take another turn after this one.',
 		cost: 16,
 		effect: 'amusementParkEffect',
 		built: false,
 	},
 	{
-		title: 'Radio Tower',
+		title: 'Radio Tower (Freedom Tower)',
 		subtitle: 'Once every turn, you can choose to re-roll your dice.',
 		cost: 22,
 		effect: 'radioTowerEffect',
