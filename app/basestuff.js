@@ -1,5 +1,4 @@
 
-import { ACTIONS, CARD_PRIORITIES, ESTABLISHMENT_TYPES, SOURCES } from '../consts';
 
 export function radioTowerEffect(player) {
 	return {
@@ -18,7 +17,7 @@ export function amusementParkEffect(player) {
 	return {
 		player: {
 			...player,
-			extraTurnWhen,
+			extraTurnWhen
 		},
 	};
 }
