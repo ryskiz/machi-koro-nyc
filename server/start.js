@@ -17,6 +17,7 @@ const pkg = require('APP')
 
 const app = express()
 
+
 if (!pkg.isProduction && !pkg.isTesting) {
   // Logging middleware (dev only)
   app.use(require('volleyball'))
@@ -78,6 +79,17 @@ if (module === require.main) {
       console.log(`Listening on http://${urlSafeHost}:${port}`)
     }
   )
+  var io = require('socket.io')(server)
+  io.on('connection', function (socket) {
+    /* This function receives the newly connected socket.
+       This function will be called for EACH browser that connects to our server. */
+    console.log('A new client has connected!');
+    console.log(socket.id);
+    
+    socket.on('disconnect', function() {
+      console.log("A client has left :'(");
+    })
+  })
 }
 
 // This check on line 64 is only starting the server if this file is being run directly by Node, and not required by another file.
