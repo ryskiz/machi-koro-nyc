@@ -10,7 +10,6 @@ import WhoAmI from './components/WhoAmI'
 
 import Board from './components/Board'
 
-// const socket = io(window.location.origin)
 
 const App = connect(
   ({ auth }) => ({ user: auth })
