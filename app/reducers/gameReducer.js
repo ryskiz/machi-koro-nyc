@@ -16,6 +16,8 @@ const ACTIVATE_LANDMARK = 'ACTIVATE_LANDMARK';
 const TOGGLE_MONEY = 'TOGGLE_MONEY';
 const PLAYER_TURN = 'PLAYER_TURN;';
 const ACTIVATE_SOCKET = 'ACTIVATE_SOCKET';
+const PLAYER_ROLLING = 'PLAYER_ROLLING';
+const PLAYER_ROLL = 'PLAYER_ROLL';
 
 
 export const initialHand = [
@@ -193,7 +195,12 @@ const receivePlayer = player => ({
     player
 })
 
-const receivingPlayer = () => ({type: RECEIVING_PLAYER})
+const receivingPlayer = () => ({type: RECEIVING_PLAYER});
+
+const playerRolling = () => ({type: PLAYER_ROLLING});
+
+const roll = number => ({type: PLAYER_ROLL, number});
+
 
 const takeCard = cardId => ({
     type: TAKE_CARD,
@@ -214,12 +221,6 @@ const pick = cardId => ({
     cardId
 });
 
-const roll = dice => ({
-    type: ROLL_DICE,
-    //payload is number rolled
-    dice
-});
-
 const steal = stolenCard => ({
     type: STEAL_CARD,
     stolenCard
@@ -228,16 +229,17 @@ const steal = stolenCard => ({
 const activateLandmark = (landmarkId) => ({
     type: ACTIVATE_LANDMARK,
     landmarkId
-})
+});
 
 const toggleMoney = (amount) => ({
     type: TOGGLE_MONEY,
     amount
-})
+});
 
 const playerTurn = () => ({
     type: PLAYER_TURN
-})
+});
+
 
 
 //Reducer
@@ -245,13 +247,14 @@ const playerTurn = () => ({
 const initialState = {
     cardsOnField: startingEstablishments,
     currentRoller: null,
-    gameWon: false
-}
+    gameWon: false,
+    lastNumberRolled: 0
+};
 
 
 export default function (state = initialState, action) {
 
-    const newState = Object.assign({}, state)
+    const newState = Object.assign({}, state);
 
     switch (action.type) {
         case PICK_CARD:
@@ -259,9 +262,6 @@ export default function (state = initialState, action) {
             break;
         case TOGGLE_MONEY:
             newState.wallet += action.amount;
-            break;
-        case ROLL_DICE:
-            newState.selected = action.item;
             break;
         case STEAL_CARD:
             break;
@@ -272,24 +272,31 @@ export default function (state = initialState, action) {
             newState.isTurn = true;
             return newState;
             break;
+        case PLAYER_ROLL:
+            newState.lastNumberRolled = action.number;
+            return newState;
+            break;
+        case PLAYER_ROLLING:
+            return newState;
+            break;
         case ACTIVATE_SOCKET:
             return newState;
             break;
         case RECEIVE_PLAYER:
-            newState.players = action.player
+            newState.players = action.player;
             return newState;
             break;
         case RECEIVING_PLAYER:
             return newState;
             break;
         case TAKE_CARD:
-            break
+            break;
         case NEW_ROLLER:
-            newState.currentRoller = action.playerId
-            break
+            newState.currentRoller = action.playerId;
+            break;
         case END_GAME:
-            newState.gameWon = true
-            break
+            newState.gameWon = true;
+            break;
         default:
             return state
     }
@@ -308,8 +315,32 @@ export const addPlayer = playerObj => dispatch => {
 
 export const updatePlayersArray = newPlayerArr => dispatch => {
     dispatch(receivePlayer(newPlayerArr))
-}
+};
 
-export const activateSocket = () => dispatch => {
-    axios.post('/')
-}
+export const rollTwo = () => dispatch => {
+    let die1 = Math.floor(Math.random() * 6 + 1);
+    let die2 = Math.floor(Math.random() * 6 + 1);
+    axios.post('/game/playerRoll', {roll: die1 + die2})
+        .then(() => {
+            dispatch(playerRolling())
+        })
+        .catch(console.error.bind(console));
+};
+
+export const rollOne = () => dispatch => {
+    let numberRolled = Math.floor(Math.random() * 6 + 1);
+    axios.post('/game/playerRoll', {roll: numberRolled})
+        .then(() => {
+            dispatch(playerRolling())
+        })
+        .catch(console.error.bind(console));
+};
+
+export const updateLastNumberRolled = number => dispatch => {
+    dispatch(roll(number))
+};
+
+// export const activateSocket = () => dispatch => {
+//     axios.post('/')
+// }
+

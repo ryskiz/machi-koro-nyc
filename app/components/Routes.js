@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {Router, Route, IndexRedirect, browserHistory} from 'react-router';
-import { updatePlayersArray } from '../reducers/gameReducer';
+import { updatePlayersArray, updateLastNumberRolled } from '../reducers/gameReducer';
 import Login from './Login';
 import WhoAmI from './WhoAmI';
 
@@ -38,8 +38,12 @@ const mapDispatch = dispatch => ({
             console.log("FUCKING PLAYERS", players);
             dispatch(updatePlayersArray(players))
         })
+        socket.on('playerRoll', (dice)=> {
+            console.log("FUCKING DICE", dice);
+            dispatch(updateLastNumberRolled(dice.roll))
+        })
     }
-})
+});
 
 
 export default connect(null, mapDispatch)(Routes);

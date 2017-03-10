@@ -50,156 +50,156 @@ export function trainStationEffect(player) {
 }
 
 export const startingEstablishments = [
-	{
-		title: 'Wheat Field (Halal Cart)',
-    id: 0,
-		subtitle: "Get 1 coin from the bank, on anyone's turn.",
-    type: 'Wheat',
-		cost: 1,
-		active: [1],
-    quantity: 6,
-    color: 'blue'
-	},
-	{
-		title: 'Ranch (Pizzeria)',
-    id: 1,
-		subtitle: "Get 1 coin from the bank, on anyone's turn.",
-    type: 'Cow',
-		cost: 1,
-		active: [2],
-    quantity: 6,
-    color: 'blue'
-	},
-	{
-		title: 'Bakery (Corner Bodega)',
-    id: 2,
-		subtitle: 'Get 1 coin from the bank, on your turn only.',
-    type: 'Bread',
-		cost: 1,
-		active: [2, 3],
-    quantity: 6,
-    color: 'green'
-	},
-	{
-		title: 'Café (Dive Bar)',
-    id: 3,
-		subtitle: 'Get 1 coin from the player who rolled the dice.',
-    type: 'Cup',
-		cost: 2,
-		active: [3],
-    quantity: 6,
-    color: 'red'
-	},
-	{
-		title: 'Convenience Store (Duane Reade)',
-    id: 4,
-		subtitle: 'Get 3 coins from the bank, on your turn only.',
-    type: 'Bread',
-		cost: 2,
-		active: [4],
-    quantity: 6,
-    color: 'green'
-	},
-	{
-		title: 'Forest (Studio Apartment)',
-    id: 5,
-		subtitle: "Get 1 coin from the bank, on anyone's turn.",
-    type: 'Gear',
-		cost: 3,
-		active: [5],
-    quantity: 6,
-    color: 'blue'
-	},
-	{
-		title: 'Business Center (Leasing Office)',
-    id: 6,
-		subtitle: 'Trade one non-Major establishment with another player, on your turn only.',
-    type: 'Major',
-		cost: 8,
-		active: [6],
-    quantity: 4,
-    color: 'purple'
-	},
-	{
-		title: 'Stadium (New Venture)',
-    id: 7,
-		subtitle: 'Get 2 coins from all players, on your turn only.',
-    type: 'Major',
-		cost: 6,
-		active: [6],
-    quantity: 4,
-    color: 'purple'
-	},
-	{
-		title: 'TV Station (Hedge Fund)',
-    id: 8,
-		subtitle: 'Take 5 coins from any one player, on your turn only.',
-    type: 'Major',
-		cost: 7,
-		active: [6],
-    quantity: 4,
-    color: 'purple'
-	},
-	{
-		title: 'Cheese Factory (5-Star Restaurant)',
-    id: 9,
-		subtitle: 'Get 3 coins from the bank for each Cow establishment that you own, on your turn only.',
-    type: 'Factory',
-		cost: 5,
-		active: [7],
-    quantity: 6,
-    color: 'green'
-	},
-	{
-		title: 'Furniture Factory (Apartment Building)',
-    id: 10,
-		subtitle: 'Get 3 coins from the bank for each Factory establishment that you own, on your turn only.',
-    type: 'Factory',
-		cost: 3,
-		active: [8],
-    quantity: 6,
-    color: 'green'
-	},
-	{
-		title: 'Mine (Brownstone Apartment)',
-    id: 11,
-		subtitle: "Get 5 coins from the bank, on anyone's turn.",
-    type: 'Gear',
-		cost: 6,
-		active: [9],
-    quantity: 6,
-    color: 'blue'
-	},
-	{
-		title: 'Family Restaurant (Nightclub)',
-    id: 12,
-		subtitle: 'Get 2 coins from the player who rolled the dice.',
-    type: 'Cup',
-		cost: 3,
-		active: [9, 10],
-    quantity: 6,
-    color: 'blue'
-	},
-	{
-		title: 'Apple Orchard (Metro Stop)',
-    id: 13,
-		subtitle: "Get 3 coins from the bank, on anyone's turn.",
-    type: 'Wheat',
-		cost: 3,
-		active: [10],
-    quantity: 6,
-    color: 'blue'
-	},
-	{
-		title: 'Fruit and Vegetable Market (Whole Foods)',
-    id: 14,
-		subtitle: 'Get 2 coins from the bank for each GRAIN establishment that you own, on your turn only.',
-    type: 'Fruit',
-		cost: 2,
-		active: [11, 12],
-    quantity: 6,
-    color: 'green'
-	}
+    {
+        title: 'Wheat Field (Halal Cart)',
+        id: 0,
+        subtitle: "Get 1 coin from the bank, on anyone's turn.",
+        type: 'Wheat',
+        cost: 1,
+        active: [1],
+        quantity: 6,
+        color: 'blue'
+    },
+    {
+        title: 'Ranch (Pizzeria)',
+        id: 1,
+        subtitle: "Get 1 coin from the bank, on anyone's turn.",
+        type: 'Cow',
+        cost: 1,
+        active: [2],
+        quantity: 6,
+        color: 'blue'
+    },
+    {
+        title: 'Bakery (Corner Bodega)',
+        id: 2,
+        subtitle: 'Get 1 coin from the bank, on your turn only.',
+        type: 'Bread',
+        cost: 1,
+        active: [2, 3],
+        quantity: 6,
+        color: 'green'
+    },
+    {
+        title: 'Café (Dive Bar)',
+        id: 3,
+        subtitle: 'Get 1 coin from the player who rolled the dice.',
+        type: 'Cup',
+        cost: 2,
+        active: [3],
+        quantity: 6,
+        color: 'red'
+    },
+    {
+        title: 'Convenience Store (Duane Reade)',
+        id: 4,
+        subtitle: 'Get 3 coins from the bank, on your turn only.',
+        type: 'Bread',
+        cost: 2,
+        active: [4],
+        quantity: 6,
+        color: 'green'
+    },
+    {
+        title: 'Forest (Studio Apartment)',
+        id: 5,
+        subtitle: "Get 1 coin from the bank, on anyone's turn.",
+        type: 'Gear',
+        cost: 3,
+        active: [5],
+        quantity: 6,
+        color: 'blue'
+    },
+    {
+        title: 'Business Center (Leasing Office)',
+        id: 6,
+        subtitle: 'Trade one non-Major establishment with another player, on your turn only.',
+        type: 'Major',
+        cost: 8,
+        active: [6],
+        quantity: 4,
+        color: 'purple'
+    },
+    {
+        title: 'Stadium (New Venture)',
+        id: 7,
+        subtitle: 'Get 2 coins from all players, on your turn only.',
+        type: 'Major',
+        cost: 6,
+        active: [6],
+        quantity: 4,
+        color: 'purple'
+    },
+    {
+        title: 'TV Station (Hedge Fund)',
+        id: 8,
+        subtitle: 'Take 5 coins from any one player, on your turn only.',
+        type: 'Major',
+        cost: 7,
+        active: [6],
+        quantity: 4,
+        color: 'purple'
+    },
+    {
+        title: 'Cheese Factory (5-Star Restaurant)',
+        id: 9,
+        subtitle: 'Get 3 coins from the bank for each Cow establishment that you own, on your turn only.',
+        type: 'Factory',
+        cost: 5,
+        active: [7],
+        quantity: 6,
+        color: 'green'
+    },
+    {
+        title: 'Furniture Factory (Apartment Building)',
+        id: 10,
+        subtitle: 'Get 3 coins from the bank for each Factory establishment that you own, on your turn only.',
+        type: 'Factory',
+        cost: 3,
+        active: [8],
+        quantity: 6,
+        color: 'green'
+    },
+    {
+        title: 'Mine (Brownstone Apartment)',
+        id: 11,
+        subtitle: "Get 5 coins from the bank, on anyone's turn.",
+        type: 'Gear',
+        cost: 6,
+        active: [9],
+        quantity: 6,
+        color: 'blue'
+    },
+    {
+        title: 'Family Restaurant (Nightclub)',
+        id: 12,
+        subtitle: 'Get 2 coins from the player who rolled the dice.',
+        type: 'Cup',
+        cost: 3,
+        active: [9, 10],
+        quantity: 6,
+        color: 'blue'
+    },
+    {
+        title: 'Apple Orchard (Metro Stop)',
+        id: 13,
+        subtitle: "Get 3 coins from the bank, on anyone's turn.",
+        type: 'Wheat',
+        cost: 3,
+        active: [10],
+        quantity: 6,
+        color: 'blue'
+    },
+    {
+        title: 'Fruit and Vegetable Market (Whole Foods)',
+        id: 14,
+        subtitle: 'Get 2 coins from the bank for each GRAIN establishment that you own, on your turn only.',
+        type: 'Fruit',
+        cost: 2,
+        active: [11, 12],
+        quantity: 6,
+        color: 'green'
+    }
 ];
 export const landmarks = [
     {
@@ -235,8 +235,6 @@ export const landmarks = [
         built: false,
     },
 ];
-
-
 
 
 export function createGame(name = 'Unnamed Game') {
