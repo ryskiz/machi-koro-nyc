@@ -16,9 +16,6 @@ const App = connect(
 )(
   ({ user, children }) =>
     <div id="parent">
-      <nav>
-        {user ? <WhoAmI /> : <Login />}
-      </nav>
       {children}
     </div>
 )
