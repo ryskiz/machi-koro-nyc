@@ -14,16 +14,24 @@ class Board extends React.Component {
     }
 
     onAddPlayerClick(evt) {
-        console.log(this.props);
         evt.preventDefault();
-        this.props.addplayer({
+        if(this.props.game.players && this.props.game.players.length === 4){
+          alert('The game is full!')
+        } else {
+          let num;
+          if(this.props.game.players) num = this.props.game.players.length
+          this.props.addplayer({
             wallet: 3,
             canRollTwo: false,
             landmarks: landmarks,
             cardsInPossession: initialHand,
             isTurn: false,
-            playerId: socket.id
-        })
+            playerId: socket.id,
+            index: num
+          });
+
+        }
+
     }
 
     rollDice(evt) {
@@ -45,7 +53,8 @@ class Board extends React.Component {
             <div className="container">
                 <div className="row">
                     <h3 className="">Machi Koro - New York City!</h3>
-                    <button type="button" className="btn btn-primary active" onClick={this.onAddPlayerClick}>Join Game</button>
+                    {this.props.game.players && this.props.game.players.length === 4 ? <button type="button" className="btn btn-primary disabled">Game Full
+                      </button>  : <button type="button" className="btn btn-primary active" onClick={this.onAddPlayerClick}>Join Game</button>}
                     <button type="button" className="btn btn-primary active" onClick={this.rollDice}>Roll Dice</button>
                 </div>
                 <div className="row">
