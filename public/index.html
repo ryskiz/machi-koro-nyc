@@ -1,15 +1,16 @@
 <!doctype html>
 <html>
 <head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/stylesheets/main.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/main.css"/>
 </head>
 <body>
-  <div id=main></div>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
+<div id=main></div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
     var socket = io();
-  </script>
-  <script async defer src=/bundle.js></script>
+</script>
+<script src="./three.js"></script>
+<script async defer src="/bundle.js"></script>
 </body>
 </html>

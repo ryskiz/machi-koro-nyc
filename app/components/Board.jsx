@@ -32,13 +32,16 @@ class Board extends React.Component {
       })
 
     }
+
   }
 
 
 
   onBuyClick(evt){
     evt.preventDefault();
+
     this.props.currentPlayer
+
 
   }
   render(){
