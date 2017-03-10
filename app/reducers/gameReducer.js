@@ -36,7 +36,6 @@ const endGame = () => ({
 //Reducer
 
 const initialState = {
-  players: [],
   cardsOnField: startingEstablishments,
   currentRoller: null,
   gameWon: false
