@@ -96,7 +96,7 @@ module.exports = app
        This function will be called for EACH browser that connects to our server. */
     console.log('A new client has connected!');
     console.log(socket.id);
-
+    console.log
     socket.on('disconnect', function() {
       console.log("A client has left :'(");
     })

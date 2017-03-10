@@ -7,6 +7,19 @@ import store from './store'
 import Routes from './components/Routes';
 
 
+import Board from './components/Board'
+
+
+const App = connect(
+  ({ auth }) => ({ user: auth })
+)(
+  ({ user, children }) =>
+    <div id="parent">
+      {children}
+    </div>
+)
+
+
 render(
   <Provider store={store}>
       <Routes/>
