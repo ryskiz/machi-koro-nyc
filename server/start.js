@@ -18,6 +18,8 @@ const pkg = require('APP')
 const app = express()
 
 
+let players = [];
+
 if (!pkg.isProduction && !pkg.isTesting) {
   // Logging middleware (dev only)
   app.use(require('volleyball'))
@@ -31,6 +33,8 @@ prettyError.skipNodeFiles()
 
 // Skip all the trace lines about express' core and sub-modules.
 prettyError.skipPackage('express')
+
+
 
 module.exports = app
   // Session middleware - compared to express-session (which is what's used in the Auther workshop), cookie-session stores sessions in a cookie, rather than some other type of session store.
@@ -51,6 +55,13 @@ module.exports = app
   // Serve static files from ../public
   .use(express.static(resolve(__dirname, '..', 'public')))
 
+  .post('/game/addPlayer', (req,res,next)=> {
+    console.log('hit this route', req.body)
+    players.push(req.body)
+    console.log("ALLL PLAYERSS", players);
+    io.emit('addPlayer', players)
+  })
+
   // Serve our api - ./api also requires in ../db, which syncs with our database
   .use('/api', require('./api'))
 
@@ -65,10 +76,6 @@ module.exports = app
     finalHandler(req, res)(err)
   })
 
-if (module === require.main) {
-  // Start listening only if we're the main module.
-  //
-  // https://nodejs.org/api/modules.html#modules_accessing_the_main_module
   const server = app.listen(
     process.env.PORT || 1337,
     () => {
@@ -79,19 +86,20 @@ if (module === require.main) {
       console.log(`Listening on http://${urlSafeHost}:${port}`)
     }
   )
-  var io = require('socket.io')(server)
+
+
+
+  const io = require('socket.io')(server)
+
   io.on('connection', function (socket) {
     /* This function receives the newly connected socket.
        This function will be called for EACH browser that connects to our server. */
     console.log('A new client has connected!');
     console.log(socket.id);
-    
+
     socket.on('disconnect', function() {
       console.log("A client has left :'(");
     })
+    //
+    // socket.on('addPlayerClick', )
   })
-}
-
-// This check on line 64 is only starting the server if this file is being run directly by Node, and not required by another file.
-// Bones does this for testing reasons. If we're running our app in development or production, we've run it directly from Node using 'npm start'.
-// If we're testing, then we don't actually want to start the server; 'module === require.main' will luckily be false in that case, because we would be requiring in this file in our tests rather than running it directly.
