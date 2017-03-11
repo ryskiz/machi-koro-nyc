@@ -58,8 +58,7 @@ export const startingEstablishments = [
         cost: 1,
         active: [1],
         quantity: 6,
-        color: 'blue',
-        iconImage: '../Wheat.png'
+        color: 'blue'
     },
     {
         title: 'Ranch (Pizzeria)',
@@ -69,8 +68,7 @@ export const startingEstablishments = [
         cost: 1,
         active: [2],
         quantity: 6,
-        color: 'blue',
-        iconImage: '../Cow.png'
+        color: 'blue'
     },
     {
         title: 'Bakery (Corner Bodega)',
@@ -80,8 +78,7 @@ export const startingEstablishments = [
         cost: 1,
         active: [2, 3],
         quantity: 6,
-        color: 'green',
-        iconImage: '../Bread.png'
+        color: 'green'
     },
     {
         title: 'Café (Dive Bar)',
@@ -91,8 +88,7 @@ export const startingEstablishments = [
         cost: 2,
         active: [3],
         quantity: 6,
-        color: 'red',
-        iconImage: '../Cup.png'
+        color: 'red'
     },
     {
         title: 'Convenience Store (Duane Reade)',
@@ -102,8 +98,7 @@ export const startingEstablishments = [
         cost: 2,
         active: [4],
         quantity: 6,
-        color: 'green',
-        iconImage: '../Bread.png'
+        color: 'green'
     },
     {
         title: 'Forest (Studio Apartment)',
@@ -113,8 +108,7 @@ export const startingEstablishments = [
         cost: 3,
         active: [5],
         quantity: 6,
-        color: 'blue',
-        iconImage: '../Gear.png'
+        color: 'blue'
     },
     {
         title: 'Business Center (Leasing Office)',
@@ -124,8 +118,7 @@ export const startingEstablishments = [
         cost: 8,
         active: [6],
         quantity: 4,
-        color: 'purple',
-        iconImage: '../Major.png'
+        color: 'purple'
     },
     {
         title: 'Stadium (New Venture)',
@@ -135,8 +128,7 @@ export const startingEstablishments = [
         cost: 6,
         active: [6],
         quantity: 4,
-        color: 'purple',
-        iconImage: '../Major.png'
+        color: 'purple'
     },
     {
         title: 'TV Station (Hedge Fund)',
@@ -146,8 +138,7 @@ export const startingEstablishments = [
         cost: 7,
         active: [6],
         quantity: 4,
-        color: 'purple',
-        iconImage: '../Major.png'
+        color: 'purple'
     },
     {
         title: 'Cheese Factory (5-Star Restaurant)',
@@ -157,8 +148,7 @@ export const startingEstablishments = [
         cost: 5,
         active: [7],
         quantity: 6,
-        color: 'green',
-        iconImage: '../Factory.png'
+        color: 'green'
     },
     {
         title: 'Furniture Factory (Apartment Building)',
@@ -168,8 +158,7 @@ export const startingEstablishments = [
         cost: 3,
         active: [8],
         quantity: 6,
-        color: 'green',
-        iconImage: '../Factory.png'
+        color: 'green'
     },
     {
         title: 'Mine (Brownstone Apartment)',
@@ -179,8 +168,7 @@ export const startingEstablishments = [
         cost: 6,
         active: [9],
         quantity: 6,
-        color: 'blue',
-        iconImage: '../Gear.png'
+        color: 'blue'
     },
     {
         title: 'Family Restaurant (Nightclub)',
@@ -190,8 +178,7 @@ export const startingEstablishments = [
         cost: 3,
         active: [9, 10],
         quantity: 6,
-        color: 'blue',
-        iconImage: '../Cup.png'
+        color: 'blue'
     },
     {
         title: 'Apple Orchard (Metro Stop)',
@@ -201,8 +188,7 @@ export const startingEstablishments = [
         cost: 3,
         active: [10],
         quantity: 6,
-        color: 'blue',
-        iconImage: '../Wheat.png'
+        color: 'blue'
     },
     {
         title: 'Fruit and Vegetable Market (Whole Foods)',
@@ -212,8 +198,7 @@ export const startingEstablishments = [
         cost: 2,
         active: [11, 12],
         quantity: 6,
-        color: 'green',
-        iconImage: '../Fruit.png'
+        color: 'green'
     }
 ];
 export const landmarks = [
@@ -317,13 +302,19 @@ export function addPlayerToGame(game, player) {
 }
 
 export function findPlayer(game, playerId) {
-    const players = game.players.filter(p => p.id === playerId);
+    const players = game.players.filter(p => p.playerId === playerId);
 
     if (!players.length) {
         return null;
     }
 
     return players[0];
+}
+
+function findPlayersActiveCards(player){
+    return player.cardsInPossession.filter((obj) => {
+        return obj.quantity > 0;
+    })
 }
 
 export function setMoney(game, playerId, money) {
@@ -346,7 +337,9 @@ export function setMoney(game, playerId, money) {
 }
 
 export function findMarketEstablishment(game, establishmentId) {
-    // const establishments = game.establishments.filter(e => e.id === establishmentId);
+
+    const establishments = game.cardsOnField.filter(e => e.id === establishmentId);
+
 
     if (!establishments.length) {
         return null;
@@ -355,8 +348,30 @@ export function findMarketEstablishment(game, establishmentId) {
     return establishments[0];
 }
 
-export function purchaseEstablishment(game, {playerId, establishmentId}) {
+export function receiveMoney(gameObj, playerId){
+    console.log("GAME OBJECT", gameObj);
+    let player = findPlayer(gameObj, playerId);
+    let activeCards = findPlayersActiveCards(player);
+    let rollNumber = gameObj.lastNumberRolled;
+    activeCards.forEach((card) => {
+        if(card.active[0] === rollNumber){
+            if(card.effect[2] && player.isTurn){
+                console.log("SHOULDNT BE HERE IF NOT MY TURN");
+                player.wallet += (card.effect[1] * card.quantity)
+            } else if(card.effect[0] === 'from bank') {
+                console.log("SHOULD be here either way");
+                player.wallet += (card.effect[1] * card.quantity)
+            }
+        }
+    });
+    gameObj.playerJustRolled = false;
+    return Object.assign({}, gameObj);
+}
+
+
+export function purchaseEstablishment(game, playerId, establishmentId) {
     const player = findPlayer(game, playerId);
+
     const establishment = findMarketEstablishment(game, establishmentId);
 
     if (!player) {
@@ -367,26 +382,17 @@ export function purchaseEstablishment(game, {playerId, establishmentId}) {
         throw new Error('Establishment not available for purchase');
     }
 
-    if (player.money < establishment.cost) {
+    if (player.wallet < establishment.cost) {
         throw new Error('Player cannot afford establishment');
     }
 
-    const updatedPlayer = {
-        ...player,
-        money: player.money - establishment.cost,
-        establishments: [
-            ...player.establishments,
-            establishment,
-        ],
-    };
-
-    return {
-        ...game,
-        bank: game.bank + establishment.cost,
-        establishments: game.establishments.filter(e => e.id !== establishmentId),
-        players: [
-            ...game.players.filter(p => p.id !== playerId),
-            updatedPlayer,
-        ],
-    };
+    game.cardsOnField[establishmentId].quantity--;
+    game.playerJustRolled = false;
+    for(let i = 0; i < game.players.length; i++){
+        if(game.players[i].playerId === playerId) {
+            game.players[i].cardsInPossession[establishmentId].quantity++;
+            game.players[i].wallet -= establishment.cost;
+        }
+    }
+    return Object.assign({}, game);
 }

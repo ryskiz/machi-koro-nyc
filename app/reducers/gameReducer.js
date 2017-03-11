@@ -1,5 +1,5 @@
-import {startingEstablishments} from '../basestuff'
-import axios from 'axios'
+import {startingEstablishments, purchaseEstablishment} from '../basestuff'
+import axios from 'axios';
 
 //Constants
 
@@ -19,12 +19,14 @@ const TOGGLE_MONEY = 'TOGGLE_MONEY';
 const ACTIVATE_SOCKET = 'ACTIVATE_SOCKET';
 const PLAYER_ROLLING = 'PLAYER_ROLLING';
 const PLAYER_ROLL = 'PLAYER_ROLL';
+const BUY_ESTABLISHMENT = 'BUY_ESTABLISHMENT';
+const RECEIVE_MONEY = 'RECEIVE_MONEY';
 
 const START_GAME = 'START_GAME';
 const SET_FIRST_PLAYER = 'SET_FIRST_PLAYER';
 
 
-export const initialHand = [
+export let initialHand = [
     {
         title: 'Wheat Field (Halal Cart)',
         id: 0,
@@ -32,6 +34,7 @@ export const initialHand = [
         type: 'Wheat Field',
         count: 6,
         cost: 1,
+        effect: ['from bank', 1],
         active: [1],
         spawn: 1,
         quantity: 1
@@ -43,6 +46,7 @@ export const initialHand = [
         type: 'Ranch',
         count: 6,
         cost: 1,
+        effect: ['from bank', 1],
         active: [2],
         spawn: 0,
         quantity: 0
@@ -54,6 +58,7 @@ export const initialHand = [
         type: 'Bakery',
         count: 6,
         cost: 1,
+        effect: ['from bank', 1, true],
         active: [2, 3],
         spawn: 1,
         quantity: 1
@@ -65,6 +70,7 @@ export const initialHand = [
         type: 'Cafe',
         count: 6,
         cost: 2,
+        effect: ['from player who rolled', 1],
         active: [3],
         spawn: 0,
         quantity: 0
@@ -76,6 +82,7 @@ export const initialHand = [
         type: 'Convenience Store',
         count: 6,
         cost: 2,
+        effect: ['from bank', 3, true],
         active: [4],
         spawn: 0,
         quantity: 0
@@ -87,6 +94,7 @@ export const initialHand = [
         type: 'Forest',
         count: 6,
         cost: 3,
+        effect: ['from bank', 1],
         active: [5],
         spawn: 0,
         quantity: 0
@@ -98,6 +106,7 @@ export const initialHand = [
         type: 'Business Center',
         count: 4,
         cost: 8,
+        effect: ['from bank', 1, true],
         active: [6],
         spawn: 0,
         quantity: 0
@@ -205,9 +214,16 @@ const playerRolling = () => ({type: PLAYER_ROLLING});
 
 const roll = number => ({type: PLAYER_ROLL, number});
 
+
 export const startGame = () => ({
 	type: START_GAME
 })
+
+export const buy = gameObj => ({type: BUY_ESTABLISHMENT, gameObj});
+
+export const receive = gameObj => ({type:RECEIVE_MONEY, gameObj})
+
+
 
 const takeCard = cardId => ({
     type: TAKE_CARD,
@@ -254,15 +270,15 @@ const setFirstPlayer = (playerIndex) => ({
 	playerIndex
 })
 
-
 //Reducer
 
 const initialState = {
     cardsOnField: startingEstablishments,
 		gameStarted: false,
     gameWon: false,
+    playerJustRolled: false,
     lastNumberRolled: 0,
-		players: []
+    players: []
 };
 
 
@@ -273,6 +289,7 @@ export default function (state = initialState, action) {
     switch (action.type) {
         case PICK_CARD:
             newState.cardsInPossession = action.items;
+            newState.playerJustRolled = false;
             break;
         case TOGGLE_MONEY:
             newState.wallet += action.amount;
@@ -282,10 +299,13 @@ export default function (state = initialState, action) {
         case ACTIVATE_LANDMARK:
             newState.landmarks[action.landmarkId].built = true;
             break;
+
         case PLAYER_ROLL:
             newState.lastNumberRolled = action.number;
+            newState.playerJustRolled = true;
             return newState;
             break;
+
 				case SET_FIRST_PLAYER:
 						newState.players[action.playerIndex].isTurn = true;
 						return newState;
@@ -296,11 +316,23 @@ export default function (state = initialState, action) {
   			case START_GAME:
 						newState.gameStarted = true;
 						return newState;
+
+        case RECEIVE_MONEY:
+            return action.gameObj;
+            break;
+        case PLAYER_ROLLING:
+            return newState;
+            break;
+        case BUY_ESTABLISHMENT:
+            return action.gameObj;
+            break;
+
         case ACTIVATE_SOCKET:
             return newState;
             break;
         case RECEIVE_PLAYER:
             newState.players = action.player;
+            newState.playerJustRolled = false;
             return newState;
             break;
         case RECEIVING_PLAYER:
@@ -354,6 +386,7 @@ export const updateLastNumberRolled = number => dispatch => {
     dispatch(roll(number))
 };
 
+
 export const endPlayerTurn = player => dispatch => {
 	axios.post('/game/endTurn', {player})
 		.then(()=>{
@@ -377,3 +410,19 @@ export const startingGame = client => dispatch => {
 		})
 		.catch(console.error.bind(console))
 }
+
+export const buyEstablishment = (game, playerId, establishmentId) => dispatch => {
+    axios.post('/game/playerBuy', {game, playerId, establishmentId})
+        .then((res) => {
+            console.log("DATA BACK FROM BUY", res.data);
+        })
+        .catch(console.error.bind(console));
+};
+
+export const receiveMoney = (gameObj, socketId) => dispatch => {
+    axios.post('/game/playerReceiveMoney', {gameObj, socketId})
+        .then((res) => {
+        console.log("RESPONSE FROM RECEIVING MONEY", res.data)
+        })
+        .catch(console.error.bind(console))
+};

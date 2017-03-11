@@ -57,9 +57,9 @@ module.exports = app
     .post('/game/addPlayer', (req, res, next) => {
         console.log('hit this route', req.body)
         players.push(req.body)
-        console.log("ALLL PLAYERSS", players);
+        console.log("ALLL PLAYERSS", players)
         io.emit('addPlayer', players)
-        res.send({message: 'event emitted'})
+        res.send({message: 'add player event emitted'})
     })
     .post('/game/playerRoll', (req, res, next) => {
         console.log('hit this roll route');
@@ -67,6 +67,7 @@ module.exports = app
         io.emit('playerRoll', req.body);
         res.send({message: 'event emitted'})
     })
+
 
     .post('/game/endTurn', (req,res,next)=> {
       let nextPlayerIndex = (req.body.player.index + 1) % players.length;
@@ -82,6 +83,18 @@ module.exports = app
       console.log('The starting player is ', firstPlayer)
       io.emit('startingPlayer', firstPlayer);
       res.send({message: `The starting player has been chosen`})
+    })
+
+
+    .post('/game/playerBuy', (req, res, next) => {
+        console.log('hit this buy route', req.body);
+        io.emit('playerBuy', req.body);
+        res.send({message: 'buy event emitted'})
+    })
+    .post('/game/playerReceiveMoney', (req, res, next) => {
+        console.log("hit this receive route", req.body);
+        io.emit('playerReceiveMoney', req.body);
+        res.send({message: 'receive event emitted'})
     })
 
     // Serve our api - ./api also requires in ../db, which syncs with our database

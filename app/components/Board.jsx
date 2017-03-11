@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import {startingEstablishments, landmarks} from '../basestuff'
-import { addPlayer, initialHand, rollTwo, rollOne, endPlayerTurn, startingGame } from '../reducers/gameReducer'
+import { addPlayer, initialHand, rollTwo, rollOne, endPlayerTurn, startingGame, buyEstablishment, receiveMoney } from '../reducers/gameReducer'
 
 
 class Board extends React.Component {
@@ -12,89 +12,111 @@ class Board extends React.Component {
     this.onAddPlayerClick = this.onAddPlayerClick.bind(this);
     this.rollDice = this.rollDice.bind(this);
     this.onStartGame = this.onStartGame.bind(this);
+    this.state = {
+      myId: socket.id
+    }
+  }
+  componentWillReceiveProps(nextGameProps){
+      // console.log("IN WILL RECEIVE", nextGameProps);
+      if(nextGameProps.game.lastNumberRolled !== 0 && nextGameProps.game.playerJustRolled) {
+          console.log("ONLY ACTIVATING ON PLAYER ROLL");
+          this.props.receive(nextGameProps.game, this.state.myId)
+      }
   }
 
   onAddPlayerClick(evt) {
     evt.preventDefault();
-    if(this.props.game.players && this.props.game.players.length === 4){
+    if(this.props.game.players.length && this.props.game.players.length === 4){
       alert('The game is full!')
     } else {
-      let num;
-      if(this.props.game.players) num = this.props.game.players.length
-      this.props.addplayer({
-        wallet: 3,
-        canRollTwo: false,
-        landmarks: landmarks,
-        cardsInPossession: initialHand,
-        isTurn: false,
-        playerId: socket.id,
-        index: num,
-        initialRoll: Math.floor(Math.random()*(100) + 1)
-      });
+      if (socket.id === this.state.myId) {
+        let num = this.props.game.players.length;
+        this.props.addplayer({
+          wallet: 3,
+          canRollTwo: false,
+          landmarks: landmarks,
+          cardsInPossession: initialHand,
+          isTurn: false,
+          playerId: socket.id,
+          index: num,
+          initialRoll: Math.floor(Math.random()*(100) + 1)
+        });
+      }
     }
   }
 
-  rollDice(evt) {
-    evt.preventDefault();
-    if (this.props.game.players && this.props.game.players[0].canRollTwo) {
-      this.props.roll2()
-    } else {
-      this.props.roll1()
+    rollDice(evt) {
+        evt.preventDefault();
+        if (this.props.game.players.length && this.props.game.players[0].canRollTwo) {
+            this.props.roll2()
+        } else {
+            this.props.roll1()
+        }
+      }
+
+    onBuyClick(itemId, evt) {
+        evt.preventDefault();
+        console.log('coin clicks', itemId);
+        this.props.buy(this.props.game, this.state.myId, itemId)
+      }
+
+    onEndTurnClick(client, evt) {
+      evt.preventDefault();
+      console.log('current player whose turn it is', client)
+      this.props.endPlayerTurn(client);
     }
-  }
 
-  onBuyClick(evt, itemId) {
-    evt.preventDefault();
-    console.log('coin clicks', itemId);
-  }
-
-  onEndTurnClick(client, evt) {
-    evt.preventDefault();
-    console.log('current player whose turn it is', client)
-    this.props.endPlayerTurn(client);
-  }
-
-  onStartGame(client, evt){
-    evt.preventDefault();
-    console.log('logged in client is: ', client);
-    this.props.startGame(client);
-  }
+    onStartGame(client, evt){
+      evt.preventDefault();
+      console.log('logged in client is: ', client);
+      this.props.startGame(client);
+    }
 
   render() {
-    const client = this.props.game.players.filter(player => {
+    const client = this.props.game.players.length && this.props.game.players.filter(player => {
       return player.playerId === socket.id
     })[0];
 
-    const items = [...startingEstablishments];
+    let items = this.props.game.cardsOnField;
     return (
       <div className="container">
         <h1 className="">Machi Koro - New York City!</h1>
         {
-          client ? <h3>{`You are Player ${client.index + 1}`}</h3> : <h3>You are not logged in!</h3>
-      }
-
-      {
-        this.props.game.gameStarted ?
-        <div className="row">
-          {
-            client && client.isTurn ?
-            <div className="btn-group">
-              <button type="button" className="btn btn-primary active" onClick={this.rollDice}>Roll Dice</button>
-              <button type="button" className="btn btn-primary active" onClick={(evt)=>{this.onEndTurnClick(client, evt)}}>End Turn</button>
-            </div>
+          client ?
+          <div>
+            <h3>{`You are Player ${client.index + 1}`} My Bank:</h3>
+            <h3> My bank: {this.props.game.players.length && this.props.game.players.filter((player) => {
+                return player.playerId === this.state.myId
+            })[0].wallet} </h3>
+            <h3>Last Roll: {this.props.game.lastNumberRolled}</h3>
+          </div>
             :
-            <h3>It is not your turn!</h3>
-          }
+            <h3>You are not logged in!</h3>
+        }
 
-          {
-            items && items.map(item => (
+        {
+          this.props.game.gameStarted ?
+          <div className="row">
+            {
+              client && client.isTurn ?
+              <div className="btn-group">
+                <button type="button" className="btn btn-primary active" onClick={this.rollDice}>Roll Dice</button>
+                <button type="button" className="btn btn-primary active" onClick={(evt)=>{this.onEndTurnClick(client, evt)}}>End Turn</button>
+              </div>
+              :
+              <h3>It is not your turn!</h3>
+            }
+
+            {
+              items && items.map(item => (
               <div className="col-md-2 well itemcontainer" key={item.id}>
                 <div className="">
                   <div className="itemcontainernamecont">
-                    <img src={item.iconImage} />
-                    <h4>
+                    <h4 >
                       <div>
-                        {item.cost}
+                        {
+                            item.active[1] ? <h5>{item.active[0]}-{item.active[1]}</h5>: <h5>{item.active[0]}</h5>
+                        }
                       </div>
                       <span>
                         <Link to={'/items/' + item.id + '/reviews'}>{item.title}</Link>
@@ -111,65 +133,73 @@ class Board extends React.Component {
                         item.quantity === 0 ?
                         <button type="button" className="btn btn-primary disabled">None
                           Left</button>
-                        :
-                        <div onClick={this.onBuyClick} className="coin-container">
-                          <div className="coin gold">
-                            <p>{item.cost}</p>
+                          :
+                          <div onClick={(evt) => this.onBuyClick(item.id, evt)} className="coin-container">
+                            <div className="coin gold">
+                              <p>{item.cost}</p>
+                            </div>
                           </div>
-                        </div>
                       }
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
-          }
-        </div>
-        :
-        <div className="row">
-          <div className="btn-group">
-            {
-              this.props.game.players && this.props.game.players.length === 4 ?
-              <button type="button" className="btn btn-primary disabled">Game Full</button>
-              :
-              client ?
-              <button type="button" className="btn btn-primary disabled">Already Joined</button>
-              :
-              <button type="button" className="btn btn-primary active" onClick={this.onAddPlayerClick}>Join Game</button>
-            }
-            {
-              this.props.game.players.length > 1 ?
-              <button type="button" className="btn btn-primary active" onClick={(evt)=>{this.onStartGame(client, evt)}}>Start Game</button>
-              :
-              <button type="button" className="btn btn-primary disabled">Need at least 2 players!</button>
-
+              ))
             }
           </div>
+          :
+          <div className="row">
+            <div className="btn-group">
+              {
+                this.props.game.players.length && this.props.game.players.length === 4 ?
+                <button type="button" className="btn btn-primary disabled">Game Full</button>
+                :
+                client ?
+                <button type="button" className="btn btn-primary disabled">Already Joined</button>
+                :
+                <button type="button" className="btn btn-primary active" onClick={this.onAddPlayerClick}>Join Game</button>
+                }
+              {
+                this.props.game.players.length && this.props.game.players.length > 1 ?
+                <button type="button" className="btn btn-primary active" onClick={(evt)=>{this.onStartGame(client, evt)}}>Start Game</button>
+                :
+                <button type="button" className="btn btn-primary disabled">Need at least 2 players!</button>
+
+              }
+              </div>
+            </div>
+          }
         </div>
-      }
-    </div>
-    )
+      )
+    }
   }
-}
-const mapStateToProps = ({game}) => ({game});
+  const mapStateToProps = ({game}) => ({game});
 
-const mapDispatchToProps = dispatch => ({
-  addplayer: function (player) {
-    dispatch(addPlayer(player))
-  },
-  roll1: function(){
-    dispatch(rollOne())
-  },
-  roll2: function(){
-    dispatch(rollTwo())
-  },
-  endPlayerTurn: function(player){
-    dispatch(endPlayerTurn(player))
-  },
-  startGame: function(client){
-    dispatch(startingGame(client))
-  }
-});
+  const mapDispatchToProps = dispatch => ({
+    addplayer: function (player) {
+      dispatch(addPlayer(player))
+    },
+    roll1: function(){
+      dispatch(rollOne())
+    },
+    roll2: function(){
+      dispatch(rollTwo())
+    },
+    endPlayerTurn: function(player){
+      dispatch(endPlayerTurn(player))
+    },
+    startGame: function(client){
+      dispatch(startingGame(client))
+    },
+    buy: function (game, playerId, establishmentId) {
+        dispatch(buyEstablishment(game, playerId, establishmentId))
+    },
+    receive: function(gameObj, playerId) {
+        dispatch(receiveMoney(gameObj, playerId))
+    }
+  });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Board)
+
+  export default connect(mapStateToProps, mapDispatchToProps)(Board)
+

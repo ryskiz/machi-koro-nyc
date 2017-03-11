@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {Router, Route, IndexRedirect, browserHistory} from 'react-router';
-import { updatePlayersArray, updateLastNumberRolled, updateNextPlayerIndexTurn, setFirstPlayerTurn, startGame } from '../reducers/gameReducer';
+import { updatePlayersArray, updateLastNumberRolled, updateNextPlayerIndexTurn, setFirstPlayerTurn, startGame, buy, receive } from '../reducers/gameReducer';
+import {purchaseEstablishment, receiveMoney} from '../basestuff';
 import Login from './Login';
 import WhoAmI from './WhoAmI';
-
 import Board from './Board';
 
 const App = connect(
@@ -45,14 +45,22 @@ const mapDispatch = dispatch => ({
         socket.on('endTurn', (indices)=> {
           dispatch(updateNextPlayerIndexTurn(indices.nextPlayerIndex, indices.lastPlayerIndex))
         })
-
         socket.on('startingPlayer', (player)=>{
           alert(`The starting player will be Player ${player.index + 1}`)
           dispatch(setFirstPlayerTurn(player.index))
           dispatch(startGame())
         })
-
-
+        socket.on('playerBuy', ({game, playerId, establishmentId})=> {
+            console.log("ON THE SOCKET END", game, playerId, establishmentId);
+            let newState = purchaseEstablishment(game, playerId, establishmentId);
+            console.log("FUCKING GAME", newState);
+            dispatch(buy(newState))
+        })
+        socket.on('playerReceiveMoney', ({gameObj, socketId}) => {
+            console.log("ON THE SOCKET END", socketId);
+            let newState = receiveMoney(gameObj, socketId);
+            dispatch(receive(newState))
+        })
     }
 });
 
