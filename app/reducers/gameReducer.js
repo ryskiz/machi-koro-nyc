@@ -6,7 +6,8 @@ import axios from 'axios'
 const RECEIVE_PLAYER = 'RECEIVE_PLAYER'
 const RECEIVING_PLAYER = 'RECEIVING_PLAYER'
 const TAKE_CARD = 'TAKE_CARD'
-const NEW_ROLLER = 'NEW_ROLLER'
+const END_TURN = 'END_TURN';
+const UPDATE_TURN = 'UPDATE_TURN'
 const END_GAME = 'END_GAME'
 
 const PICK_CARD = 'PICK_CARD';
@@ -14,10 +15,13 @@ const ROLL_DICE = 'ROLL_DICE';
 const STEAL_CARD = 'STEAL_CARD';
 const ACTIVATE_LANDMARK = 'ACTIVATE_LANDMARK';
 const TOGGLE_MONEY = 'TOGGLE_MONEY';
-const PLAYER_TURN = 'PLAYER_TURN;';
+
 const ACTIVATE_SOCKET = 'ACTIVATE_SOCKET';
 const PLAYER_ROLLING = 'PLAYER_ROLLING';
 const PLAYER_ROLL = 'PLAYER_ROLL';
+
+const START_GAME = 'START_GAME';
+const SET_FIRST_PLAYER = 'SET_FIRST_PLAYER';
 
 
 export const initialHand = [
@@ -201,15 +205,18 @@ const playerRolling = () => ({type: PLAYER_ROLLING});
 
 const roll = number => ({type: PLAYER_ROLL, number});
 
+export const startGame = () => ({
+	type: START_GAME
+})
 
 const takeCard = cardId => ({
     type: TAKE_CARD,
     cardId
 })
 
-const newRoller = playerId => ({
-    type: NEW_ROLLER,
-    playerId
+const endTurn = playerIndex => ({
+    type: END_TURN,
+    playerIndex
 })
 
 const endGame = () => ({
@@ -236,19 +243,26 @@ const toggleMoney = (amount) => ({
     amount
 });
 
-const playerTurn = () => ({
-    type: PLAYER_TURN
+const updateTurn = (nextPlayerIndex, lastPlayerIndex) => ({
+    type: UPDATE_TURN,
+		nextPlayerIndex,
+		lastPlayerIndex
 });
 
+const setFirstPlayer = (playerIndex) => ({
+	type: SET_FIRST_PLAYER,
+	playerIndex
+})
 
 
 //Reducer
 
 const initialState = {
     cardsOnField: startingEstablishments,
-    currentRoller: null,
+		gameStarted: false,
     gameWon: false,
-    lastNumberRolled: 0
+    lastNumberRolled: 0,
+		players: []
 };
 
 
@@ -268,17 +282,20 @@ export default function (state = initialState, action) {
         case ACTIVATE_LANDMARK:
             newState.landmarks[action.landmarkId].built = true;
             break;
-        case PLAYER_TURN:
-            newState.isTurn = true;
-            return newState;
-            break;
         case PLAYER_ROLL:
             newState.lastNumberRolled = action.number;
             return newState;
             break;
-        case PLAYER_ROLLING:
-            return newState;
-            break;
+				case SET_FIRST_PLAYER:
+						newState.players[action.playerIndex].isTurn = true;
+						return newState;
+				case UPDATE_TURN:
+						newState.players[action.lastPlayerIndex].isTurn = false;
+						newState.players[action.nextPlayerIndex].isTurn = true;
+						return newState;
+  			case START_GAME:
+						newState.gameStarted = true;
+						return newState;
         case ACTIVATE_SOCKET:
             return newState;
             break;
@@ -290,9 +307,6 @@ export default function (state = initialState, action) {
             return newState;
             break;
         case TAKE_CARD:
-            break;
-        case NEW_ROLLER:
-            newState.currentRoller = action.playerId;
             break;
         case END_GAME:
             newState.gameWon = true;
@@ -340,7 +354,26 @@ export const updateLastNumberRolled = number => dispatch => {
     dispatch(roll(number))
 };
 
-// export const activateSocket = () => dispatch => {
-//     axios.post('/')
-// }
+export const endPlayerTurn = player => dispatch => {
+	axios.post('/game/endTurn', {player})
+		.then(()=>{
+			console.log(`player with index ${player.index} has ended turn!`)
+		})
+		.catch(console.error.bind(console));
+}
 
+export const updateNextPlayerIndexTurn = (nextPlayerIndex, lastPlayerIndex) => dispatch => {
+	dispatch(updateTurn(nextPlayerIndex, lastPlayerIndex))
+}
+
+export const setFirstPlayerTurn = (playerIndex) => dispatch => {
+	dispatch(setFirstPlayer(playerIndex))
+}
+
+export const startingGame = client => dispatch => {
+	axios.post('/game/startingGame', {client})
+		.then(()=>{
+			console.log('Selecting the starting player!')
+		})
+		.catch(console.error.bind(console))
+}

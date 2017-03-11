@@ -7,9 +7,6 @@ import store from './store'
 import Routes from './components/Routes';
 
 
-import Board from './components/Board'
-
-
 render(
   <Provider store={store}>
       <Routes/>

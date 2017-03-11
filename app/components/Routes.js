@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {Router, Route, IndexRedirect, browserHistory} from 'react-router';
-import { updatePlayersArray, updateLastNumberRolled } from '../reducers/gameReducer';
+import { updatePlayersArray, updateLastNumberRolled, updateNextPlayerIndexTurn, setFirstPlayerTurn, startGame } from '../reducers/gameReducer';
 import Login from './Login';
 import WhoAmI from './WhoAmI';
 
@@ -42,6 +42,17 @@ const mapDispatch = dispatch => ({
             console.log("FUCKING DICE", dice);
             dispatch(updateLastNumberRolled(dice.roll))
         })
+        socket.on('endTurn', (indices)=> {
+          dispatch(updateNextPlayerIndexTurn(indices.nextPlayerIndex, indices.lastPlayerIndex))
+        })
+
+        socket.on('startingPlayer', (player)=>{
+          alert(`The starting player will be Player ${player.index + 1}`)
+          dispatch(setFirstPlayerTurn(player.index))
+          dispatch(startGame())
+        })
+
+
     }
 });
 

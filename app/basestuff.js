@@ -331,7 +331,7 @@ export function setMoney(game, playerId, money) {
 }
 
 export function findMarketEstablishment(game, establishmentId) {
-    const establishments = game.establishments.filter(e => e.id === establishmentId);
+    // const establishments = game.establishments.filter(e => e.id === establishmentId);
 
     if (!establishments.length) {
         return null;

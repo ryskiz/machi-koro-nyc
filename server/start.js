@@ -59,12 +59,31 @@ module.exports = app
         players.push(req.body)
         console.log("ALLL PLAYERSS", players);
         io.emit('addPlayer', players)
+        res.send({message: 'event emitted'})
     })
     .post('/game/playerRoll', (req, res, next) => {
         console.log('hit this roll route');
         console.log("ALLL PLAYERSS", players);
         io.emit('playerRoll', req.body);
+        res.send({message: 'event emitted'})
     })
+
+    .post('/game/endTurn', (req,res,next)=> {
+      let nextPlayerIndex = (req.body.player.index + 1) % players.length;
+      let lastPlayerIndex = req.body.player.index;
+      console.log('next player index is', nextPlayerIndex);
+      io.emit('endTurn', {nextPlayerIndex, lastPlayerIndex});
+      res.send({message: 'turn changed'})
+    })
+
+    .post('/game/startingGame', (req,res,next)=>{
+      console.log('Determining who had the highest roll');
+      let firstPlayer = players.sort(function(a, b){return b.initialRoll-a.initialRoll})[0];
+      console.log('The starting player is ', firstPlayer)
+      io.emit('startingPlayer', firstPlayer);
+      res.send({message: `The starting player has been chosen`})
+    })
+
     // Serve our api - ./api also requires in ../db, which syncs with our database
     .use('/api', require('./api'))
 
@@ -98,8 +117,10 @@ io.on('connection', function (socket) {
      This function will be called for EACH browser that connects to our server. */
     console.log('A new client has connected!');
     console.log(socket.id);
+
     socket.on('disconnect', function () {
         console.log("A client has left :'(");
     });
+
 
 });
