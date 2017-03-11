@@ -71,27 +71,28 @@ class Board extends React.Component {
         <h1 className="">Machi Koro - New York City!</h1>
         {
           client ? <h3>{`You are Player ${client.index + 1}`}</h3> : <h3>You are not logged in!</h3>
-        }
+      }
 
-        {
-          this.props.game.gameStarted ?
-          <div className="row">
-            {
-              client && client.isTurn ?
-              <div className="btn-group">
-                <button type="button" className="btn btn-primary active" onClick={this.rollDice}>Roll Dice</button>
-                <button type="button" className="btn btn-primary active" onClick={(evt)=>{this.onEndTurnClick(client, evt)}}>End Turn</button>
-              </div>
-              :
-              <h3>It is not your turn!</h3>
-            }
+      {
+        this.props.game.gameStarted ?
+        <div className="row">
+          {
+            client && client.isTurn ?
+            <div className="btn-group">
+              <button type="button" className="btn btn-primary active" onClick={this.rollDice}>Roll Dice</button>
+              <button type="button" className="btn btn-primary active" onClick={(evt)=>{this.onEndTurnClick(client, evt)}}>End Turn</button>
+            </div>
+            :
+            <h3>It is not your turn!</h3>
+          }
 
-            {
-              items && items.map(item => (
+          {
+            items && items.map(item => (
               <div className="col-md-2 well itemcontainer" key={item.id}>
                 <div className="">
                   <div className="itemcontainernamecont">
-                    <h4 >
+                    <img src={item.iconImage} />
+                    <h4>
                       <div>
                         {item.cost}
                       </div>
@@ -110,65 +111,65 @@ class Board extends React.Component {
                         item.quantity === 0 ?
                         <button type="button" className="btn btn-primary disabled">None
                           Left</button>
-                          :
-                          <div onClick={this.onBuyClick} className="coin-container">
-                            <div className="coin gold">
-                              <p>{item.cost}</p>
-                            </div>
+                        :
+                        <div onClick={this.onBuyClick} className="coin-container">
+                          <div className="coin gold">
+                            <p>{item.cost}</p>
                           </div>
+                        </div>
                       }
-                      </div>
                     </div>
                   </div>
                 </div>
-              ))
-            }
-          </div>
-          :
-          <div className="row">
-            <div className="btn-group">
-              {
-                this.props.game.players && this.props.game.players.length === 4 ?
-                <button type="button" className="btn btn-primary disabled">Game Full</button>
-                :
-                client ?
-                <button type="button" className="btn btn-primary disabled">Already Joined</button>
-                :
-                <button type="button" className="btn btn-primary active" onClick={this.onAddPlayerClick}>Join Game</button>
-                }
-              {
-                this.props.game.players.length > 1 ?
-                <button type="button" className="btn btn-primary active" onClick={(evt)=>{this.onStartGame(client, evt)}}>Start Game</button>
-                :
-                <button type="button" className="btn btn-primary disabled">Need at least 2 players!</button>
-
-              }
               </div>
-            </div>
+            ))
           }
         </div>
-      )
-    }
+        :
+        <div className="row">
+          <div className="btn-group">
+            {
+              this.props.game.players && this.props.game.players.length === 4 ?
+              <button type="button" className="btn btn-primary disabled">Game Full</button>
+              :
+              client ?
+              <button type="button" className="btn btn-primary disabled">Already Joined</button>
+              :
+              <button type="button" className="btn btn-primary active" onClick={this.onAddPlayerClick}>Join Game</button>
+            }
+            {
+              this.props.game.players.length > 1 ?
+              <button type="button" className="btn btn-primary active" onClick={(evt)=>{this.onStartGame(client, evt)}}>Start Game</button>
+              :
+              <button type="button" className="btn btn-primary disabled">Need at least 2 players!</button>
+
+            }
+          </div>
+        </div>
+      }
+    </div>
+    )
   }
-  const mapStateToProps = ({game}) => ({game});
+}
+const mapStateToProps = ({game}) => ({game});
 
-  const mapDispatchToProps = dispatch => ({
-    addplayer: function (player) {
-      dispatch(addPlayer(player))
-    },
-    roll1: function(){
-      dispatch(rollOne())
-    },
-    roll2: function(){
-      dispatch(rollTwo())
-    },
-    endPlayerTurn: function(player){
-      dispatch(endPlayerTurn(player))
-    },
-    startGame: function(client){
-      dispatch(startingGame(client))
-    }
-  });
+const mapDispatchToProps = dispatch => ({
+  addplayer: function (player) {
+    dispatch(addPlayer(player))
+  },
+  roll1: function(){
+    dispatch(rollOne())
+  },
+  roll2: function(){
+    dispatch(rollTwo())
+  },
+  endPlayerTurn: function(player){
+    dispatch(endPlayerTurn(player))
+  },
+  startGame: function(client){
+    dispatch(startingGame(client))
+  }
+});
 
 
-  export default connect(mapStateToProps, mapDispatchToProps)(Board)
+export default connect(mapStateToProps, mapDispatchToProps)(Board)

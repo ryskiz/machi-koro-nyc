@@ -58,7 +58,8 @@ export const startingEstablishments = [
         cost: 1,
         active: [1],
         quantity: 6,
-        color: 'blue'
+        color: 'blue',
+        iconImage: '../Wheat.png'
     },
     {
         title: 'Ranch (Pizzeria)',
@@ -68,7 +69,8 @@ export const startingEstablishments = [
         cost: 1,
         active: [2],
         quantity: 6,
-        color: 'blue'
+        color: 'blue',
+        iconImage: '../Cow.png'
     },
     {
         title: 'Bakery (Corner Bodega)',
@@ -78,7 +80,8 @@ export const startingEstablishments = [
         cost: 1,
         active: [2, 3],
         quantity: 6,
-        color: 'green'
+        color: 'green',
+        iconImage: '../Bread.png'
     },
     {
         title: 'Café (Dive Bar)',
@@ -88,7 +91,8 @@ export const startingEstablishments = [
         cost: 2,
         active: [3],
         quantity: 6,
-        color: 'red'
+        color: 'red',
+        iconImage: '../Cup.png'
     },
     {
         title: 'Convenience Store (Duane Reade)',
@@ -98,7 +102,8 @@ export const startingEstablishments = [
         cost: 2,
         active: [4],
         quantity: 6,
-        color: 'green'
+        color: 'green',
+        iconImage: '../Bread.png'
     },
     {
         title: 'Forest (Studio Apartment)',
@@ -108,7 +113,8 @@ export const startingEstablishments = [
         cost: 3,
         active: [5],
         quantity: 6,
-        color: 'blue'
+        color: 'blue',
+        iconImage: '../Gear.png'
     },
     {
         title: 'Business Center (Leasing Office)',
@@ -118,7 +124,8 @@ export const startingEstablishments = [
         cost: 8,
         active: [6],
         quantity: 4,
-        color: 'purple'
+        color: 'purple',
+        iconImage: '../Major.png'
     },
     {
         title: 'Stadium (New Venture)',
@@ -128,7 +135,8 @@ export const startingEstablishments = [
         cost: 6,
         active: [6],
         quantity: 4,
-        color: 'purple'
+        color: 'purple',
+        iconImage: '../Major.png'
     },
     {
         title: 'TV Station (Hedge Fund)',
@@ -138,7 +146,8 @@ export const startingEstablishments = [
         cost: 7,
         active: [6],
         quantity: 4,
-        color: 'purple'
+        color: 'purple',
+        iconImage: '../Major.png'
     },
     {
         title: 'Cheese Factory (5-Star Restaurant)',
@@ -148,7 +157,8 @@ export const startingEstablishments = [
         cost: 5,
         active: [7],
         quantity: 6,
-        color: 'green'
+        color: 'green',
+        iconImage: '../Factory.png'
     },
     {
         title: 'Furniture Factory (Apartment Building)',
@@ -158,7 +168,8 @@ export const startingEstablishments = [
         cost: 3,
         active: [8],
         quantity: 6,
-        color: 'green'
+        color: 'green',
+        iconImage: '../Factory.png'
     },
     {
         title: 'Mine (Brownstone Apartment)',
@@ -168,7 +179,8 @@ export const startingEstablishments = [
         cost: 6,
         active: [9],
         quantity: 6,
-        color: 'blue'
+        color: 'blue',
+        iconImage: '../Gear.png'
     },
     {
         title: 'Family Restaurant (Nightclub)',
@@ -178,7 +190,8 @@ export const startingEstablishments = [
         cost: 3,
         active: [9, 10],
         quantity: 6,
-        color: 'blue'
+        color: 'blue',
+        iconImage: '../Cup.png'
     },
     {
         title: 'Apple Orchard (Metro Stop)',
@@ -188,7 +201,8 @@ export const startingEstablishments = [
         cost: 3,
         active: [10],
         quantity: 6,
-        color: 'blue'
+        color: 'blue',
+        iconImage: '../Wheat.png'
     },
     {
         title: 'Fruit and Vegetable Market (Whole Foods)',
@@ -198,7 +212,8 @@ export const startingEstablishments = [
         cost: 2,
         active: [11, 12],
         quantity: 6,
-        color: 'green'
+        color: 'green',
+        iconImage: '../Fruit.png'
     }
 ];
 export const landmarks = [
