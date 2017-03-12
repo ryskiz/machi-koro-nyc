@@ -1,4 +1,4 @@
-import {startingEstablishments, purchaseEstablishment} from '../basestuff'
+import {startingEstablishments, purchaseEstablishment, findPlayersActiveCards } from '../basestuff'
 import axios from 'axios';
 
 //Constants
@@ -216,12 +216,15 @@ const roll = number => ({type: PLAYER_ROLL, number});
 
 
 export const startGame = () => ({
-	type: START_GAME
+
+    type: START_GAME
+
 })
 
 export const buy = gameObj => ({type: BUY_ESTABLISHMENT, gameObj});
 
-export const receive = gameObj => ({type:RECEIVE_MONEY, gameObj})
+
+export const receiveMoney = (playerIndex, amount) => ({type: RECEIVE_MONEY, playerIndex, amount})
 
 
 
@@ -261,20 +264,20 @@ const toggleMoney = (amount) => ({
 
 const updateTurn = (nextPlayerIndex, lastPlayerIndex) => ({
     type: UPDATE_TURN,
-		nextPlayerIndex,
-		lastPlayerIndex
+    nextPlayerIndex,
+    lastPlayerIndex
 });
 
 const setFirstPlayer = (playerIndex) => ({
-	type: SET_FIRST_PLAYER,
-	playerIndex
+    type: SET_FIRST_PLAYER,
+    playerIndex
 })
 
 //Reducer
 
 const initialState = {
     cardsOnField: startingEstablishments,
-		gameStarted: false,
+    gameStarted: false,
     gameWon: false,
     playerJustRolled: false,
     lastNumberRolled: 0,
@@ -290,15 +293,14 @@ export default function (state = initialState, action) {
         case PICK_CARD:
             newState.cardsInPossession = action.items;
             newState.playerJustRolled = false;
-            break;
+
         case TOGGLE_MONEY:
             newState.wallet += action.amount;
-            break;
+
         case STEAL_CARD:
-            break;
+
         case ACTIVATE_LANDMARK:
             newState.landmarks[action.landmarkId].built = true;
-            break;
 
         case PLAYER_ROLL:
             newState.lastNumberRolled = action.number;
@@ -306,43 +308,50 @@ export default function (state = initialState, action) {
             return newState;
             break;
 
-				case SET_FIRST_PLAYER:
-						newState.players[action.playerIndex].isTurn = true;
-						return newState;
-				case UPDATE_TURN:
-						newState.players[action.lastPlayerIndex].isTurn = false;
-						newState.players[action.nextPlayerIndex].isTurn = true;
-						return newState;
-  			case START_GAME:
-						newState.gameStarted = true;
-						return newState;
+        case SET_FIRST_PLAYER:
+            newState.players[action.playerIndex].isTurn = true;
+            return newState;
 
-        case RECEIVE_MONEY:
-            return action.gameObj;
-            break;
-        case PLAYER_ROLLING:
+        case UPDATE_TURN:
+            newState.players[action.lastPlayerIndex].isTurn = false;
+            newState.players[action.nextPlayerIndex].isTurn = true;
             return newState;
             break;
+
+        case START_GAME:
+            newState.gameStarted = true;
+            return newState;
+
+        case RECEIVE_MONEY:
+          newState.playerJustRolled = false;
+          newState.players[action.playerIndex].wallet += action.amount;
+          return newState;
+          break;
+
+        case PLAYER_ROLLING:
+            return newState;
+
         case BUY_ESTABLISHMENT:
             return action.gameObj;
-            break;
 
         case ACTIVATE_SOCKET:
             return newState;
-            break;
+
         case RECEIVE_PLAYER:
             newState.players = action.player;
             newState.playerJustRolled = false;
             return newState;
-            break;
+
         case RECEIVING_PLAYER:
             return newState;
-            break;
+
         case TAKE_CARD:
             break;
+
         case END_GAME:
             newState.gameWon = true;
-            break;
+
+
         default:
             return state
     }
@@ -373,9 +382,9 @@ export const rollTwo = () => dispatch => {
         .catch(console.error.bind(console));
 };
 
-export const rollOne = () => dispatch => {
-    let numberRolled = Math.floor(Math.random() * 6 + 1);
-    axios.post('/game/playerRoll', {roll: numberRolled})
+export const rollOne = (num) => dispatch => {
+    // let numberRolled = Math.floor(Math.random() * 6 + 1);
+    axios.post('/game/playerRoll', {roll: num})
         .then(() => {
             dispatch(playerRolling())
         })
@@ -394,11 +403,6 @@ export const endPlayerTurn = player => dispatch => {
 		})
 		.catch(console.error.bind(console));
 }
-
-export const updateNextPlayerIndexTurn = (nextPlayerIndex, lastPlayerIndex) => dispatch => {
-	dispatch(updateTurn(nextPlayerIndex, lastPlayerIndex))
-}
-
 export const setFirstPlayerTurn = (playerIndex) => dispatch => {
 	dispatch(setFirstPlayer(playerIndex))
 }
@@ -411,6 +415,10 @@ export const startingGame = client => dispatch => {
 		.catch(console.error.bind(console))
 }
 
+export const updateNextPlayerIndexTurn = (nextPlayerIndex, lastPlayerIndex) => dispatch => {
+    dispatch(updateTurn(nextPlayerIndex, lastPlayerIndex))
+}
+
 export const buyEstablishment = (game, playerId, establishmentId) => dispatch => {
     axios.post('/game/playerBuy', {game, playerId, establishmentId})
         .then((res) => {
@@ -419,10 +427,31 @@ export const buyEstablishment = (game, playerId, establishmentId) => dispatch =>
         .catch(console.error.bind(console));
 };
 
-export const receiveMoney = (gameObj, socketId) => dispatch => {
-    axios.post('/game/playerReceiveMoney', {gameObj, socketId})
+export const receivingMoney = gameObj => dispatch => {
+    let playerAmountsToChange = [];
+    let playersInObj = gameObj.players;
+    let rollNumber = gameObj.lastNumberRolled;
+
+    playersInObj.forEach(player => {
+      let updatesForPlayer = {amount: 0, playerIndex: player.index};
+      let activeCards = player.cardsInPossession.filter(card=>{
+        return card.quantity > 0
+      });
+
+      activeCards.forEach(card => {
+        if(card.active.includes(rollNumber) && player.isTurn && card.effect[2]){
+                updatesForPlayer.amount += (card.effect[1] * card.quantity);
+            } else if(card.active.includes(rollNumber) && !card.effect[2] ) {
+                updatesForPlayer.amount += (card.effect[1] * card.quantity)
+            }
+        })
+      playerAmountsToChange.push(updatesForPlayer)
+      // console.log("THIS IS THE MOST IMPORTANT CLOG", playerAmountsToChange, 'AND', updatesForPlayer)
+    });
+    console.log("UGGGGGH", playerAmountsToChange);
+    axios.post('/game/playerReceiveMoney', {playerAmountsToChange})
         .then((res) => {
-        console.log("RESPONSE FROM RECEIVING MONEY", res.data)
+        console.log("Updating player money amounts", res)
         })
         .catch(console.error.bind(console))
-};
+  };

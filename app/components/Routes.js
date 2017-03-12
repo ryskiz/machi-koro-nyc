@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {Router, Route, IndexRedirect, browserHistory} from 'react-router';
-import { updatePlayersArray, updateLastNumberRolled, updateNextPlayerIndexTurn, setFirstPlayerTurn, startGame, buy, receive } from '../reducers/gameReducer';
-import {purchaseEstablishment, receiveMoney} from '../basestuff';
+import { updatePlayersArray, updateLastNumberRolled, updateNextPlayerIndexTurn, setFirstPlayerTurn, startGame, buy, receivingMoney, receiveMoney } from '../reducers/gameReducer';
+import {purchaseEstablishment, allPlayers} from '../basestuff';
 import Login from './Login';
 import WhoAmI from './WhoAmI';
 import Board from './Board';
@@ -35,31 +35,29 @@ const Routes = ({initialListen}) => {
 const mapDispatch = dispatch => ({
     initialListen: function(){
         socket.on('addPlayer', (players)=> {
-            console.log("FUCKING PLAYERS", players);
             dispatch(updatePlayersArray(players))
         })
         socket.on('playerRoll', (dice)=> {
-            console.log("FUCKING DICE", dice);
+          console.log("DICE", dice)
             dispatch(updateLastNumberRolled(dice.roll))
+            // dispatch(receivingMoney(newGameObj))
         })
-        socket.on('endTurn', (indices)=> {
+        socket.on('endTurn', (indices) => {
           dispatch(updateNextPlayerIndexTurn(indices.nextPlayerIndex, indices.lastPlayerIndex))
         })
-        socket.on('startingPlayer', (player)=>{
+        socket.on('startingPlayer', (player) => {
           alert(`The starting player will be Player ${player.index + 1}`)
           dispatch(setFirstPlayerTurn(player.index))
           dispatch(startGame())
         })
-        socket.on('playerBuy', ({game, playerId, establishmentId})=> {
-            console.log("ON THE SOCKET END", game, playerId, establishmentId);
+        socket.on('playerBuy', ({game, playerId, establishmentId}) => {
             let newState = purchaseEstablishment(game, playerId, establishmentId);
-            console.log("FUCKING GAME", newState);
             dispatch(buy(newState))
         })
-        socket.on('playerReceiveMoney', ({gameObj, socketId}) => {
-            console.log("ON THE SOCKET END", socketId);
-            let newState = receiveMoney(gameObj, socketId);
-            dispatch(receive(newState))
+        socket.on('playerReceiveMoney', ({playerAmountsToChange}) => {
+          playerAmountsToChange.forEach(changeObject => {
+            dispatch(receiveMoney(changeObject.playerIndex, changeObject.amount))
+          })
         })
     }
 });

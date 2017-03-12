@@ -62,8 +62,6 @@ module.exports = app
         res.send({message: 'add player event emitted'})
     })
     .post('/game/playerRoll', (req, res, next) => {
-        console.log('hit this roll route');
-        console.log("ALLL PLAYERSS", players);
         io.emit('playerRoll', req.body);
         res.send({message: 'event emitted'})
     })
@@ -72,27 +70,22 @@ module.exports = app
     .post('/game/endTurn', (req,res,next)=> {
       let nextPlayerIndex = (req.body.player.index + 1) % players.length;
       let lastPlayerIndex = req.body.player.index;
-      console.log('next player index is', nextPlayerIndex);
       io.emit('endTurn', {nextPlayerIndex, lastPlayerIndex});
       res.send({message: 'turn changed'})
     })
 
     .post('/game/startingGame', (req,res,next)=>{
-      console.log('Determining who had the highest roll');
       let firstPlayer = players.sort(function(a, b){return b.initialRoll-a.initialRoll})[0];
-      console.log('The starting player is ', firstPlayer)
       io.emit('startingPlayer', firstPlayer);
       res.send({message: `The starting player has been chosen`})
     })
 
 
     .post('/game/playerBuy', (req, res, next) => {
-        console.log('hit this buy route', req.body);
         io.emit('playerBuy', req.body);
         res.send({message: 'buy event emitted'})
     })
     .post('/game/playerReceiveMoney', (req, res, next) => {
-        console.log("hit this receive route", req.body);
         io.emit('playerReceiveMoney', req.body);
         res.send({message: 'receive event emitted'})
     })

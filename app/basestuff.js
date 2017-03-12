@@ -311,7 +311,7 @@ export function findPlayer(game, playerId) {
     return players[0];
 }
 
-function findPlayersActiveCards(player){
+export function findPlayersActiveCards(player){
     return player.cardsInPossession.filter((obj) => {
         return obj.quantity > 0;
     })
@@ -348,25 +348,33 @@ export function findMarketEstablishment(game, establishmentId) {
     return establishments[0];
 }
 
-export function receiveMoney(gameObj, playerId){
-    console.log("GAME OBJECT", gameObj);
-    let player = findPlayer(gameObj, playerId);
-    let activeCards = findPlayersActiveCards(player);
-    let rollNumber = gameObj.lastNumberRolled;
-    activeCards.forEach((card) => {
-        if(card.active[0] === rollNumber){
-            if(card.effect[2] && player.isTurn){
-                console.log("SHOULDNT BE HERE IF NOT MY TURN");
-                player.wallet += (card.effect[1] * card.quantity)
-            } else if(card.effect[0] === 'from bank') {
-                console.log("SHOULD be here either way");
-                player.wallet += (card.effect[1] * card.quantity)
-            }
-        }
-    });
-    gameObj.playerJustRolled = false;
-    return Object.assign({}, gameObj);
-}
+
+// export function receiveMoney(gameObj, player){
+//
+//     let activeCards = findPlayersActiveCards(player);
+//     let rollNumber = gameObj.lastNumberRolled;
+//     activeCards.forEach((card) => {
+//         if(card.active.includes(rollNumber)){
+//             if(card.effect[2] && player.isTurn){
+//                 console.log("SHOULDNT BE HERE IF NOT MY TURN");
+//                 player.wallet += (card.effect[1] * card.quantity)
+//             } else if(card.effect[0] === 'from bank') {
+//                 console.log("SHOULD be here either way");
+//                 player.wallet += (card.effect[1] * card.quantity)
+//             }
+//         }
+//     });
+//     // gameObj.playerJustRolled = false;
+//     return player;
+// }
+//
+// export function allPlayers(gameObj){
+//     let finalGameState = [];
+//     gameObj.players.forEach((player) => {
+//         finalGameState.push(receiveMoney(gameObj, player))
+//     });
+//     return Object.assign({}, gameObj, {players: finalGameState, playerJustRolled: false});
+// }
 
 
 export function purchaseEstablishment(game, playerId, establishmentId) {

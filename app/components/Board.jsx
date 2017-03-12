@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import {startingEstablishments, landmarks} from '../basestuff'
-import { addPlayer, initialHand, rollTwo, rollOne, endPlayerTurn, startingGame, buyEstablishment, receiveMoney } from '../reducers/gameReducer'
+import { addPlayer, initialHand, rollTwo, rollOne, endPlayerTurn, startingGame, buyEstablishment, receivingMoney } from '../reducers/gameReducer'
 
 
 class Board extends React.Component {
@@ -15,13 +15,6 @@ class Board extends React.Component {
     this.state = {
       myId: socket.id
     }
-  }
-  componentWillReceiveProps(nextGameProps){
-      // console.log("IN WILL RECEIVE", nextGameProps);
-      if(nextGameProps.game.lastNumberRolled !== 0 && nextGameProps.game.playerJustRolled) {
-          console.log("ONLY ACTIVATING ON PLAYER ROLL");
-          this.props.receive(nextGameProps.game, this.state.myId)
-      }
   }
 
   onAddPlayerClick(evt) {
@@ -50,25 +43,25 @@ class Board extends React.Component {
         if (this.props.game.players.length && this.props.game.players[0].canRollTwo) {
             this.props.roll2()
         } else {
-            this.props.roll1()
+          let numberRolled = Math.floor(Math.random() * 6 + 1);
+          let newState = Object.assign({}, this.props.game, {lastNumberRolled: numberRolled})
+          this.props.roll1(numberRolled)
+          this.props.receivingMoney(newState)
         }
       }
 
     onBuyClick(itemId, evt) {
         evt.preventDefault();
-        console.log('coin clicks', itemId);
         this.props.buy(this.props.game, this.state.myId, itemId)
       }
 
     onEndTurnClick(client, evt) {
       evt.preventDefault();
-      console.log('current player whose turn it is', client)
       this.props.endPlayerTurn(client);
     }
 
     onStartGame(client, evt){
       evt.preventDefault();
-      console.log('logged in client is: ', client);
       this.props.startGame(client);
     }
 
@@ -179,8 +172,8 @@ class Board extends React.Component {
     addplayer: function (player) {
       dispatch(addPlayer(player))
     },
-    roll1: function(){
-      dispatch(rollOne())
+    roll1: function(num){
+      dispatch(rollOne(num))
     },
     roll2: function(){
       dispatch(rollTwo())
@@ -194,12 +187,11 @@ class Board extends React.Component {
     buy: function (game, playerId, establishmentId) {
         dispatch(buyEstablishment(game, playerId, establishmentId))
     },
-    receive: function(gameObj, playerId) {
-        dispatch(receiveMoney(gameObj, playerId))
+    receivingMoney: function(gameObj) {
+        dispatch(receivingMoney(gameObj))
     }
   });
 
 
 
   export default connect(mapStateToProps, mapDispatchToProps)(Board)
-
