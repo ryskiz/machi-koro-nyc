@@ -213,7 +213,7 @@ export const landmarks = [
     {
         id: 1,
         title: 'Shopping Mall (Times Square)',
-        subtitle: 'Each of your Cup and Bread establishments earn +1 coin.',
+        subtitle: 'Each of your CUP and STORE establishments earn +1 coin.',
         cost: 10,
         effect: 'shoppingMallEffect',
         built: false,
