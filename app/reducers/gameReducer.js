@@ -1,6 +1,5 @@
 import {startingEstablishments, purchaseEstablishment, findPlayersActiveCards } from '../basestuff'
 import axios from 'axios';
-
 //Constants
 
 const RECEIVE_PLAYER = 'RECEIVE_PLAYER'
@@ -293,65 +292,60 @@ export default function (state = initialState, action) {
         case PICK_CARD:
             newState.cardsInPossession = action.items;
             newState.playerJustRolled = false;
-
+            break;
         case TOGGLE_MONEY:
             newState.wallet += action.amount;
-
+            break;
         case STEAL_CARD:
-
+            break;
         case ACTIVATE_LANDMARK:
             newState.landmarks[action.landmarkId].built = true;
-
+            break;
         case PLAYER_ROLL:
             newState.lastNumberRolled = action.number;
             newState.playerJustRolled = true;
             return newState;
             break;
-
         case SET_FIRST_PLAYER:
             newState.players[action.playerIndex].isTurn = true;
             return newState;
-
+            break;
         case UPDATE_TURN:
             newState.players[action.lastPlayerIndex].isTurn = false;
             newState.players[action.nextPlayerIndex].isTurn = true;
             return newState;
             break;
-
         case START_GAME:
             newState.gameStarted = true;
             return newState;
-
+            break;
         case RECEIVE_MONEY:
           newState.playerJustRolled = false;
           newState.players[action.playerIndex].wallet += action.amount;
           return newState;
           break;
-
         case PLAYER_ROLLING:
             return newState;
-
+            break;
         case BUY_ESTABLISHMENT:
             return action.gameObj;
-
+            break
         case ACTIVATE_SOCKET:
             return newState;
-
+            break;
         case RECEIVE_PLAYER:
             newState.players = action.player;
             newState.playerJustRolled = false;
             return newState;
-
+            break;
         case RECEIVING_PLAYER:
             return newState;
-
+            break;
         case TAKE_CARD:
             break;
-
         case END_GAME:
             newState.gameWon = true;
-
-
+            break;
         default:
             return state
     }
@@ -360,11 +354,7 @@ export default function (state = initialState, action) {
 // Dispatch Functions
 
 export const addPlayer = playerObj => dispatch => {
-    axios.post('/game/addPlayer', playerObj)
-        .then((res) => {
-            dispatch(receivingPlayer())
-        })
-        .catch(console.error.bind(console))
+    socket.emit('add', playerObj);
 };
 
 
@@ -375,20 +365,11 @@ export const updatePlayersArray = newPlayerArr => dispatch => {
 export const rollTwo = () => dispatch => {
     let die1 = Math.floor(Math.random() * 6 + 1);
     let die2 = Math.floor(Math.random() * 6 + 1);
-    axios.post('/game/playerRoll', {roll: die1 + die2})
-        .then(() => {
-            dispatch(playerRolling())
-        })
-        .catch(console.error.bind(console));
+    socket.emit('updateLastRoll', (die1 + die2))
 };
 
 export const rollOne = (num) => dispatch => {
-    // let numberRolled = Math.floor(Math.random() * 6 + 1);
-    axios.post('/game/playerRoll', {roll: num})
-        .then(() => {
-            dispatch(playerRolling())
-        })
-        .catch(console.error.bind(console));
+    socket.emit('updateLastRoll', num);
 };
 
 export const updateLastNumberRolled = number => dispatch => {
@@ -397,22 +378,14 @@ export const updateLastNumberRolled = number => dispatch => {
 
 
 export const endPlayerTurn = player => dispatch => {
-	axios.post('/game/endTurn', {player})
-		.then(()=>{
-			console.log(`player with index ${player.index} has ended turn!`)
-		})
-		.catch(console.error.bind(console));
+    socket.emit('endTurn', player);
 }
 export const setFirstPlayerTurn = (playerIndex) => dispatch => {
 	dispatch(setFirstPlayer(playerIndex))
 }
 
 export const startingGame = client => dispatch => {
-	axios.post('/game/startingGame', {client})
-		.then(()=>{
-			console.log('Selecting the starting player!')
-		})
-		.catch(console.error.bind(console))
+    socket.emit('start', client);
 }
 
 export const updateNextPlayerIndexTurn = (nextPlayerIndex, lastPlayerIndex) => dispatch => {
@@ -420,11 +393,7 @@ export const updateNextPlayerIndexTurn = (nextPlayerIndex, lastPlayerIndex) => d
 }
 
 export const buyEstablishment = (game, playerId, establishmentId) => dispatch => {
-    axios.post('/game/playerBuy', {game, playerId, establishmentId})
-        .then((res) => {
-            console.log("DATA BACK FROM BUY", res.data);
-        })
-        .catch(console.error.bind(console));
+    socket.emit('playerBuyEstablishment', {game, playerId, establishmentId});
 };
 
 export const receivingMoney = gameObj => dispatch => {
@@ -446,12 +415,6 @@ export const receivingMoney = gameObj => dispatch => {
             }
         })
       playerAmountsToChange.push(updatesForPlayer)
-      // console.log("THIS IS THE MOST IMPORTANT CLOG", playerAmountsToChange, 'AND', updatesForPlayer)
     });
-    console.log("UGGGGGH", playerAmountsToChange);
-    axios.post('/game/playerReceiveMoney', {playerAmountsToChange})
-        .then((res) => {
-        console.log("Updating player money amounts", res)
-        })
-        .catch(console.error.bind(console))
+    socket.emit('playerReceive', playerAmountsToChange);
   };

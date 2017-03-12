@@ -14,7 +14,6 @@ const finalHandler = require('finalhandler')
 //
 // This next line requires our root index.js:
 const pkg = require('APP')
-
 const app = express()
 
 
@@ -26,13 +25,13 @@ if (!pkg.isProduction && !pkg.isTesting) {
 }
 
 // Pretty error prints errors all pretty.
-const prettyError = new PrettyError()
+const prettyError = new PrettyError();
 
 // Skip events.js and http.js and similar core node files.
-prettyError.skipNodeFiles()
+prettyError.skipNodeFiles();
 
 // Skip all the trace lines about express' core and sub-modules.
-prettyError.skipPackage('express')
+prettyError.skipPackage('express');
 
 
 module.exports = app
@@ -53,42 +52,6 @@ module.exports = app
 
     // Serve static files from ../public
     .use(express.static(resolve(__dirname, '..', 'public')))
-
-    .post('/game/addPlayer', (req, res, next) => {
-        console.log('hit this route', req.body)
-        players.push(req.body)
-        console.log("ALLL PLAYERSS", players)
-        io.emit('addPlayer', players)
-        res.send({message: 'add player event emitted'})
-    })
-    .post('/game/playerRoll', (req, res, next) => {
-        io.emit('playerRoll', req.body);
-        res.send({message: 'event emitted'})
-    })
-
-
-    .post('/game/endTurn', (req,res,next)=> {
-      let nextPlayerIndex = (req.body.player.index + 1) % players.length;
-      let lastPlayerIndex = req.body.player.index;
-      io.emit('endTurn', {nextPlayerIndex, lastPlayerIndex});
-      res.send({message: 'turn changed'})
-    })
-
-    .post('/game/startingGame', (req,res,next)=>{
-      let firstPlayer = players.sort(function(a, b){return b.initialRoll-a.initialRoll})[0];
-      io.emit('startingPlayer', firstPlayer);
-      res.send({message: `The starting player has been chosen`})
-    })
-
-
-    .post('/game/playerBuy', (req, res, next) => {
-        io.emit('playerBuy', req.body);
-        res.send({message: 'buy event emitted'})
-    })
-    .post('/game/playerReceiveMoney', (req, res, next) => {
-        io.emit('playerReceiveMoney', req.body);
-        res.send({message: 'receive event emitted'})
-    })
 
     // Serve our api - ./api also requires in ../db, which syncs with our database
     .use('/api', require('./api'))
@@ -124,9 +87,38 @@ io.on('connection', function (socket) {
     console.log('A new client has connected!');
     console.log(socket.id);
 
+
     socket.on('disconnect', function () {
         console.log("A client has left :'(");
     });
+
+    socket.on('add', function(player){
+        players.push(player);
+        io.emit('addPlayer', players);
+    })
+
+    socket.on('updateLastRoll', function(num){
+        io.emit('playerRoll', {roll:num});
+    })
+
+    socket.on('endTurn', function(player){
+        let nextPlayerIndex = (player.index + 1) % players.length;
+        let lastPlayerIndex = player.index;
+        io.emit('endTurn', {nextPlayerIndex, lastPlayerIndex});
+    })
+
+    socket.on('start', function(client){
+        let firstPlayer = players.sort(function(a, b){return b.initialRoll-a.initialRoll})[0];
+        io.emit('startingPlayer', firstPlayer);
+    })
+
+    socket.on('playerBuyEstablishment', function(playerBuyObj){
+        io.emit('playerBuy', playerBuyObj);
+    })
+
+    socket.on('playerReceive', function(playerAmountsToChange){
+        io.emit('playerReceiveMoney', {playerAmountsToChange});
+    })
 
 
 });

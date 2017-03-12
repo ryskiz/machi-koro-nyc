@@ -36,29 +36,33 @@ const mapDispatch = dispatch => ({
     initialListen: function(){
         socket.on('addPlayer', (players)=> {
             dispatch(updatePlayersArray(players))
-        })
+        });
+
         socket.on('playerRoll', (dice)=> {
-          console.log("DICE", dice)
             dispatch(updateLastNumberRolled(dice.roll))
-            // dispatch(receivingMoney(newGameObj))
-        })
+        });
+
         socket.on('endTurn', (indices) => {
           dispatch(updateNextPlayerIndexTurn(indices.nextPlayerIndex, indices.lastPlayerIndex))
-        })
+        });
+
         socket.on('startingPlayer', (player) => {
           alert(`The starting player will be Player ${player.index + 1}`)
           dispatch(setFirstPlayerTurn(player.index))
           dispatch(startGame())
-        })
+        });
+
         socket.on('playerBuy', ({game, playerId, establishmentId}) => {
             let newState = purchaseEstablishment(game, playerId, establishmentId);
             dispatch(buy(newState))
-        })
+        });
+
         socket.on('playerReceiveMoney', ({playerAmountsToChange}) => {
           playerAmountsToChange.forEach(changeObject => {
             dispatch(receiveMoney(changeObject.playerIndex, changeObject.amount))
-          })
-        })
+          });
+        });
+
     }
 });
 
