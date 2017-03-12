@@ -30,7 +30,7 @@ export let initialHand = [
         title: 'Wheat Field (Halal Cart)',
         id: 0,
         subtitle: "Get 1 coin from the bank, on anyone's turn.",
-        type: 'Wheat Field',
+        type: 'GRAIN',
         count: 6,
         cost: 1,
         effect: ['from bank', 1],
@@ -42,7 +42,7 @@ export let initialHand = [
         title: 'Ranch (Pizzeria)',
         id: 1,
         subtitle: "Get 1 coin from the bank, on anyone's turn.",
-        type: 'Ranch',
+        type: 'CATTLE',
         count: 6,
         cost: 1,
         effect: ['from bank', 1],
@@ -54,7 +54,7 @@ export let initialHand = [
         title: 'Bakery (Corner Bodega)',
         id: 2,
         subtitle: 'Get 1 coin from the bank, on your turn only.',
-        type: 'Bakery',
+        type: 'STORE',
         count: 6,
         cost: 1,
         effect: ['from bank', 1, true],
@@ -66,7 +66,7 @@ export let initialHand = [
         title: 'Café (Dive Bar)',
         id: 3,
         subtitle: 'Get 1 coin from the player who rolled the dice.',
-        type: 'Cafe',
+        type: 'CUP',
         count: 6,
         cost: 2,
         effect: ['from player who rolled', 1],
@@ -78,7 +78,7 @@ export let initialHand = [
         title: 'Convenience Store (Duane Reade)',
         id: 4,
         subtitle: 'Get 3 coins from the bank, on your turn only.',
-        type: 'Convenience Store',
+        type: 'STORE',
         count: 6,
         cost: 2,
         effect: ['from bank', 3, true],
@@ -90,7 +90,7 @@ export let initialHand = [
         title: 'Forest (Studio Apartment)',
         id: 5,
         subtitle: "Get 1 coin from the bank, on anyone's turn.",
-        type: 'Forest',
+        type: 'INDUSTRY',
         count: 6,
         cost: 3,
         effect: ['from bank', 1],
@@ -101,11 +101,11 @@ export let initialHand = [
     {
         title: 'Business Center (Leasing Office)',
         id: 6,
-        subtitle: 'Trade one non-TOWER establishment with another player, on your turn only.',
-        type: 'Business Center',
+        subtitle: 'Trade one non-MAJOR establishment with another player, on your turn only.',
+        type: 'MAJOR',
         count: 4,
         cost: 8,
-        effect: ['from bank', 1, true],
+        effect: ['business', 0, true],
         active: [6],
         spawn: 0,
         quantity: 0
@@ -114,8 +114,9 @@ export let initialHand = [
         title: 'Stadium (New Venture)',
         id: 7,
         subtitle: 'Get 2 coins from all players, on your turn only.',
-        type: 'Stadium',
+        type: 'MAJOR',
         count: 4,
+        effect: ['stadium', 2, true],
         cost: 6,
         active: [6],
         spawn: 0,
@@ -125,8 +126,9 @@ export let initialHand = [
         title: 'TV Station (Hedge Fund)',
         id: 8,
         subtitle: 'Take 5 coins from any one player, on your turn only.',
-        type: 'TV Station',
+        type: 'MAJOR',
         count: 4,
+        effect: ['tv station', 5, true],
         cost: 7,
         active: [6],
         spawn: 0,
@@ -136,8 +138,9 @@ export let initialHand = [
         title: 'Cheese Factory (5-Star Restaurant)',
         id: 9,
         subtitle: 'Get 3 coins from the bank for each CATTLE establishment that you own, on your turn only.',
-        type: 'Cheese Factory',
+        type: 'FACTORY',
         count: 6,
+        effect: ['multiplier', 3, true, 'CATTLE'],
         cost: 5,
         active: [7],
         spawn: 0,
@@ -147,8 +150,9 @@ export let initialHand = [
         title: 'Furniture Factory (Apartment Building)',
         id: 10,
         subtitle: 'Get 3 coins from the bank for each FACTORY establishment that you own, on your turn only.',
-        type: 'Furniture Factory',
+        type: 'FACTORY',
         count: 6,
+        effect: ['multiplier', 3, true, 'INDUSTRY'],
         cost: 3,
         active: [8],
         spawn: 0,
@@ -158,8 +162,9 @@ export let initialHand = [
         title: 'Mine (Brownstone Apartment)',
         id: 11,
         subtitle: "Get 5 coins from the bank, on anyone's turn.",
-        type: 'Mine',
+        type: 'INDUSTRY',
         count: 6,
+        effect: ['from bank', 5],
         cost: 6,
         active: [9],
         spawn: 0,
@@ -169,8 +174,9 @@ export let initialHand = [
         title: 'Family Restaurant (Nightclub)',
         id: 12,
         subtitle: 'Get 2 coins from the player who rolled the dice.',
-        type: 'Family Restaurant',
+        type: 'CUP',
         count: 6,
+        effect: ['from player who rolled', 2],
         cost: 3,
         active: [9, 10],
         spawn: 0,
@@ -180,8 +186,9 @@ export let initialHand = [
         title: 'Apple Orchard (Metro Stop)',
         id: 13,
         subtitle: "Get 3 coins from the bank, on anyone's turn.",
-        type: 'Apple Orchard',
+        type: 'GRAIN',
         count: 6,
+        effect: ['from bank', 3],
         cost: 3,
         active: [10],
         spawn: 0,
@@ -191,8 +198,9 @@ export let initialHand = [
         title: 'Fruit and Vegetable Market (Whole Foods)',
         id: 14,
         subtitle: 'Get 2 coins from the bank for each GRAIN establishment that you own, on your turn only.',
-        type: 'Fruit and Vegetable Market',
+        type: 'FRUIT',
         count: 6,
+        effect: ['multiplier', 2, true, 'GRAIN'],
         cost: 2,
         active: [11, 12],
         spawn: 0,
@@ -408,13 +416,82 @@ export const receivingMoney = gameObj => dispatch => {
       });
 
       activeCards.forEach(card => {
-        if(card.active.includes(rollNumber) && player.isTurn && card.effect[2]){
+            if(card.active.includes(rollNumber) && player.isTurn && card.effect[2]){
                 updatesForPlayer.amount += (card.effect[1] * card.quantity);
-            } else if(card.active.includes(rollNumber) && !card.effect[2] ) {
+            }
+            if(card.active.includes(rollNumber) && card.effect[0] === 'multiplier' && card.effect[2] && player.isTurn) {
+                let multiplierCount = activeCards.filter(card => card.type === card.effect[3]).length;
+                updatesForPlayer.amount += (card.effect[1] * multiplierCount);
+            }
+            if(card.active.includes(rollNumber) && !card.effect[2] && card.effect[0] === 'from bank') {
                 updatesForPlayer.amount += (card.effect[1] * card.quantity)
             }
+
+
+            if(card.effect[0] === 'stadium'){
+              let rollingPlayer = playersInObj.filter(rollingPlayer => rollingPlayer.isTurn)[0];
+              for(let i = player.index + 1; i !== player.index; i = (i + 1) % playersInObj.length){
+                  let amountFromPlayer = [];
+                  let totalAmount = 0;
+                  if(playerInObj[i].wallet < (card.quantity * card.effect[1])){
+                    amountFromPlayer.push({amount: playerInObj[i].wallet, playerIndex: playersInObj[i].index})
+                    totalAmount += playerInObj[i].wallet
+                  } else {
+                    amountFromPlayer.push({amount:(card.effect[1] * card.quantity), playerIndex: playersInObj[i].index})
+                    totalAmount += (card.effect[1] * card.quantity);
+                  }
+                }
+              if(player.isTurn){
+                updatesForPlayer.amount += totalAmount;
+              } else {
+                updatesForPlayer.amount -= (amountFromPlayer.filter(playerToTakeFrom => playerToTakeFrom.playerIndex === player.index)[0].amount)
+              }
+            }
+
+            if(card.effect[0] === 'tv station'){
+
+            }
+
+            if(card.effect[0] === 'business'){
+
+            }
         })
-      playerAmountsToChange.push(updatesForPlayer)
-    });
+        let redCardNumbers = [3, 9, 10];
+        if(player.isTurn && redCardNumbers.includes(rollNumber)){
+          let playersToPay = [];
+          let playerWhoRolledWallet = player.wallet;
+          let totalSubtracted = 0;
+          let i;
+          if(player.index === playersInObj.length-1){
+            i = 0
+          } else {
+            i = player.index + 1
+          }
+          for(i; i !== player.index; i = (i + 1) % playersInObj.length){
+              let otherPlayerActiveRedCard = playersInObj[i].cardsInPossession.filter(card=>{
+                return card.quantity > 0 && card.active.includes(rollNumber) && card.type === 'CUP'
+              })[0];
+              console.log('other player red card', otherPlayerActiveRedCard)
+
+              if(playerWhoRolledWallet < (otherPlayerActiveRedCard.effect[1] * otherPlayerActiveRedCard.quantity)){
+                playersToPay.push({amount: playerWhoRolledWallet, playerIndex: playersInObj[i].index})
+                totalSubtracted += playerWhoRolledWallet
+                playerWhoRolledWallet = 0;
+                break
+              } else {
+                playersToPay.push({amount:(otherPlayerActiveRedCard.effect[1] * otherPlayerActiveRedCard.quantity), playerIndex: playersInObj[i].index})
+                totalSubtracted += (otherPlayerActiveRedCard.effect[1] * otherPlayerActiveRedCard.quantity)
+                playerWhoRolledWallet -= (otherPlayerActiveRedCard.effect[1] * otherPlayerActiveRedCard.quantity)
+              }
+          }
+          console.log('total loss', totalSubtracted)
+          console.log('players to pay', playersToPay)
+          updatesForPlayer.amount -= totalSubtracted;
+          playersToPay.forEach(player => {
+            playerAmountsToChange.push(player)
+          })
+        }
+        playerAmountsToChange.push(updatesForPlayer)
+      });
     socket.emit('playerReceive', playerAmountsToChange);
   };
