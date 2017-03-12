@@ -1,27 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {Router, Route, IndexRedirect, browserHistory} from 'react-router';
-import { updatePlayersArray, updateLastNumberRolled, updateNextPlayerIndexTurn, setFirstPlayerTurn, startGame, buy, receivingMoney, receiveMoney } from '../reducers/gameReducer';
 import {purchaseEstablishment, allPlayers} from '../basestuff';
-import Login from './Login';
-import WhoAmI from './WhoAmI';
+
 import MenuWrap from './MenuWrap';
 let Menu = require('react-burger-menu').push;
 import Board from './Board';
 import socketListen from '../sockets';
 
 const App = connect(
-    ({ auth }) => ({ user: auth })
+    ({ game }) => ({ game })
 )(
-    ({ user, children }) =>
+    ({ game, children }) =>
         <div>
             <MenuWrap wait={20}>
                 <Menu id="menu" pageWrapId={'page-wrap'} outerContainerId={'outer-container'} right>
-                        <a href="#">something</a>
-                        <a href="#">something</a>
-                        <a href="#">something</a>
-                        <a href="#">something</a>
-                        <a href="#">something</a>
+                    <h1>Players</h1>
+                    {
+                        game.players.length && game.players.map((player) => {
+                            return (
+                                <a href="#">Player {player.index + 1}</a>
+                            )
+                        })
+                    }
                 </Menu>
             </MenuWrap>
             <main id="page-wrap">
