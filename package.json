@@ -60,6 +60,7 @@
     "pg": "^6.1.0",
     "pretty-error": "^2.0.2",
     "react": "^15.3.2",
+    "react-burger-menu": "^1.10.14",
     "react-dice": "^1.0.1",
     "react-dice-complete": "1.0.1",
     "react-dom": "^15.3.2",

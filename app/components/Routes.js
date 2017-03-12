@@ -5,17 +5,27 @@ import { updatePlayersArray, updateLastNumberRolled, updateNextPlayerIndexTurn, 
 import {purchaseEstablishment, allPlayers} from '../basestuff';
 import Login from './Login';
 import WhoAmI from './WhoAmI';
+import MenuWrap from './MenuWrap';
+let Menu = require('react-burger-menu').push;
 import Board from './Board';
 
 const App = connect(
     ({ auth }) => ({ user: auth })
 )(
     ({ user, children }) =>
-        <div id="parent">
-            <nav>
-                {user ? <WhoAmI /> : <Login />}
-            </nav>
-            {children}
+        <div>
+            <MenuWrap wait={20}>
+                <Menu id="menu" pageWrapId={'page-wrap'} outerContainerId={'outer-container'} right>
+                        <a href="#">something</a>
+                        <a href="#">something</a>
+                        <a href="#">something</a>
+                        <a href="#">something</a>
+                        <a href="#">something</a>
+                </Menu>
+            </MenuWrap>
+            <main id="page-wrap">
+                {children}
+            </main>
         </div>
 );
 
@@ -24,9 +34,9 @@ const App = connect(
 const Routes = ({initialListen}) => {
   return (
       <Router history={browserHistory}>
-          <Route path="/" component={App} onEnter={initialListen}>
+          <Route path="/" component={App} >
               <IndexRedirect to="/board" />
-              <Route path="/board" component={Board} />
+              <Route path="/board" component={Board}/>
           </Route>
       </Router>
   );
