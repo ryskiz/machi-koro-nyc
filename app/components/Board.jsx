@@ -81,90 +81,102 @@ class Board extends React.Component {
 
         let items = this.props.game.cardsOnField;
         return (
-            <div className="container">
-                <h1 className="">Machi Koro - New York City!</h1>
-                {
-                    client ?
-                        <div>
-                            <h3>{`You are Player ${client.index + 1}`} My Bank:</h3>
-                            <h3> My
-                                bank: {this.props.game.players.length && this.props.game.players.filter((player) => {
-                                    return player.playerId === this.state.myId
-                                })[0].wallet} </h3>
-                            <h3>Last Roll: {this.props.game.lastNumberRolled}</h3>
-                        </div>
-                        :
-                        <h3>You are not logged in!</h3>
-                }
-
+            <div>
+                <div className="container">
+                    <div className="row">
+                        <h1>Machi Koro - New York City!</h1>
+                        {
+                            client ?
+                                <div className="col-md-12">
+                                    <h3>{`You are Player ${client.index + 1}`} My Bank:</h3>
+                                    <h3> My
+                                        bank: {this.props.game.players.length && this.props.game.players.filter((player) => {
+                                            return player.playerId === this.state.myId
+                                        })[0].wallet} </h3>
+                                    <h3>Last Roll: {this.props.game.lastNumberRolled}</h3>
+                                </div>
+                                :
+                                <h3>You are not logged in!</h3>
+                        }
+                    </div>
+                </div>
+                <div className="container">
                 {
                     this.props.game.gameStarted ?
-                        <div className="row">
+                        <div>
                             {
                                 client && client.isTurn ?
-                                    <div className="btn-group">
-                                        <button type="button" className="btn btn-primary active"
-                                                onClick={this.rollDice}>Roll Dice
-                                        </button>
-                                        <button type="button" className="btn btn-primary active" onClick={(evt) => {
-                                            this.onEndTurnClick(client, evt)
-                                        }}>End Turn
-                                        </button>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <div className="btn-group">
+                                                <button type="button" className="btn btn-primary active"
+                                                        onClick={this.rollDice}>Roll Dice
+                                                </button>
+                                                <button type="button" className="btn btn-primary active"
+                                                        onClick={(evt) => {
+                                                            this.onEndTurnClick(client, evt)
+                                                        }}>End Turn
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                     :
                                     <h3>It is not your turn!</h3>
                             }
-
-                            {
-                                items && items.map(item => (
-                                    <div className="col-md-2 well itemcontainer" key={item.id}>
-                                        <div className="">
-                                            <div className="itemcontainernamecont">
-                                                <h4 >
-                                                    <div>
-                                                        {
-                                                            item.active[1] ?
-                                                                <h5>{item.active[0]}-{item.active[1]}</h5> :
-                                                                <h5>{item.active[0]}</h5>
-                                                        }
-                                                    </div>
-                                                    <span>
+                            <div className="row">
+                                {
+                                    items && items.map(item => (
+                                        <div className="col-md-2 well itemcontainer" key={item.id}>
+                                            <div className="">
+                                                <div className="itemcontainernamecont">
+                                                    <h4 >
+                                                        <div>
+                                                            {
+                                                                item.active[1] ?
+                                                                    <h5>{item.active[0]}-{item.active[1]}</h5> :
+                                                                    <h5>{item.active[0]}</h5>
+                                                            }
+                                                        </div>
+                                                        <span>
                         <Link to={'/items/' + item.id + '/reviews'}>{item.title}</Link>
                       </span>
-                                                </h4>
-                                                <div id="">
-                                                    Quantity: {item.quantity}
-                                                </div>
-                                                <div id="">
-                                                    {item.subtitle}
-                                                </div>
-                                                <div>
-                                                    {
-                                                        item.quantity === 0 ?
-                                                            <button type="button" className="btn btn-primary disabled">
-                                                                None
-                                                                Left</button>
-                                                            :
-                                                            <div onClick={(evt) => this.onBuyClick(item.id, evt)}
-                                                                 className="coin-container">
-                                                                <div className="coin gold">
-                                                                    <p>{item.cost}</p>
+                                                    </h4>
+                                                    <div id="">
+                                                        Quantity: {item.quantity}
+                                                    </div>
+                                                    <div id="">
+                                                        {item.subtitle}
+                                                    </div>
+                                                    <div>
+                                                        {
+                                                            item.quantity === 0 ?
+                                                                <button type="button"
+                                                                        className="btn btn-primary disabled">
+                                                                    None
+                                                                    Left</button>
+                                                                :
+                                                                <div onClick={(evt) => this.onBuyClick(item.id, evt)}
+                                                                     className="coin-container">
+                                                                    <div className="coin gold">
+                                                                        <p>{item.cost}</p>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                    }
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))
-                            }
+                                    ))
+                                }
+                            </div>
                         </div>
                         :
                         <div className="row">
                             <div className="btn-group">
                                 {
                                     this.props.game.players.length && this.props.game.players.length === 4 ?
-                                        <button type="button" className="btn btn-primary disabled">Game Full</button>
+                                        <button type="button" className="btn btn-primary disabled">Game
+                                            Full</button>
                                         :
                                         client ?
                                             <button type="button" className="btn btn-primary disabled">Already
@@ -186,6 +198,7 @@ class Board extends React.Component {
                             </div>
                         </div>
                 }
+            </div>
             </div>
         )
     }
