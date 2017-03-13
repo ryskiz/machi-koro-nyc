@@ -87,8 +87,9 @@ class Board extends React.Component {
         return (
             <div>
                 <div className="container">
-                    <div className="row">
-                        <h1>Machi Koro - New York City!</h1>
+                    <div className="row panelUpper">
+                      <h1 className="title">Machi Koro - New York City!</h1>
+
                         {
                             client ?
                                 <div className="col-md-12">
@@ -128,24 +129,25 @@ class Board extends React.Component {
                                 <div className="row">
                                     {
                                         items && items.map(item => (
-                                            <div className="col-md-2 well itemcontainer" key={item.id}>
+                                            <div className={"col-md-2 well itemcontainer " + item.color} key={item.id}>
                                                 <div className="">
                                                     <div className="itemcontainernamecont">
                                                         <h4 >
-                                                            <div>
+                                                            <div id="itemcost">
                                                                 {
                                                                     item.active[1] ?
                                                                         <h5>{item.active[0]}-{item.active[1]}</h5> :
                                                                         <h5>{item.active[0]}</h5>
                                                                 }
+                                                                <h4>{item.title}</h4>
+                                                                <img src={item.iconImage}></img>
                                                             </div>
                                                         </h4>
                                                         <div id="">
                                                             Quantity: {item.quantity}
+
                                                         </div>
-                                                        <div id="">
-                                                            {item.subtitle}
-                                                        </div>
+
                                                         <div>
                                                             {
                                                                 item.quantity === 0 ?
@@ -205,6 +207,9 @@ class Board extends React.Component {
                           }
                         </div>
                         <div className="container">
+
+                        </div>
+                        <div className="container">
                           <div className="row">
                             <SpringGrid
                               component="ul"
@@ -220,43 +225,13 @@ class Board extends React.Component {
                                   <div className="col-md-2 well itemcontainer" key={card.id}>
                                       <div className="">
                                           <div className="itemcontainernamecont">
-                                              <h4 >
-                                                  <div>
-                                                      {
-                                                          card.active[1] ?
-                                                              <h5>{card.active[0]}-{card.active[1]}</h5> :
-                                                              <h5>{card.active[0]}</h5>
-                                                      }
-                                                  </div>
-                                              </h4>
                                               <div id="">
                                                   Quantity: {card.quantity}
                                               </div>
                                               <div id="">
-                                                  {card.subtitle}
+                                                  {card.title}
                                               </div>
-                                              <div>
-                                                  {
-                                                      card.quantity === 0 ?
-                                                          <button type="button"
-                                                                  className="btn btn-primary disabled">
-                                                              None
-                                                              Left</button>
-                                                          :
-                                                          <div onClick={(evt) => {
-                                                              if (client && client.isTurn) {
-                                                                  this.onBuyClick(card.id, evt)
-                                                              } else {
-                                                                  alert("IT'S NOT YOUR TURN!")
-                                                              }
-                                                          }}
-                                                               className="coin-container">
-                                                              <div className="coin gold">
-                                                                  <p>{card.cost}</p>
-                                                              </div>
-                                                          </div>
-                                                  }
-                                              </div>
+
                                           </div>
                                       </div>
                                   </div>

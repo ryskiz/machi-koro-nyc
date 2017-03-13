@@ -58,7 +58,8 @@ export const startingEstablishments = [
         cost: 1,
         active: [1],
         quantity: 6,
-        color: 'blue'
+        color: 'blue',
+        iconImage: 'Wheat.png'
     },
     {
         title: 'Ranch (Pizzeria)',
@@ -68,7 +69,10 @@ export const startingEstablishments = [
         cost: 1,
         active: [2],
         quantity: 6,
-        color: 'blue'
+        iconImage: 'Cow.png',
+        color: 'blue',
+
+
     },
     {
         title: 'Bakery (Corner Bodega)',
@@ -78,6 +82,7 @@ export const startingEstablishments = [
         cost: 1,
         active: [2, 3],
         quantity: 6,
+        iconImage: 'Bread.png',
         color: 'green'
     },
     {
@@ -88,8 +93,8 @@ export const startingEstablishments = [
         cost: 2,
         active: [3],
         quantity: 6,
-        color: 'red'
-    },
+        iconImage: 'Cup.png',
+        color: 'red'     },
     {
         title: 'Convenience Store (Duane Reade)',
         id: 4,
@@ -98,6 +103,7 @@ export const startingEstablishments = [
         cost: 2,
         active: [4],
         quantity: 6,
+        iconImage: 'Bread.png',
         color: 'green'
     },
     {
@@ -108,6 +114,7 @@ export const startingEstablishments = [
         cost: 3,
         active: [5],
         quantity: 6,
+        iconImage: 'Gear.png',
         color: 'blue'
     },
     {
@@ -118,6 +125,7 @@ export const startingEstablishments = [
         cost: 8,
         active: [6],
         quantity: 4,
+        iconImage: 'Major.png',
         color: 'purple'
     },
     {
@@ -128,6 +136,7 @@ export const startingEstablishments = [
         cost: 6,
         active: [6],
         quantity: 4,
+        iconImage: 'Major.png',
         color: 'purple'
     },
     {
@@ -138,6 +147,7 @@ export const startingEstablishments = [
         cost: 7,
         active: [6],
         quantity: 4,
+        iconImage: 'Major.png',
         color: 'purple'
     },
     {
@@ -148,6 +158,7 @@ export const startingEstablishments = [
         cost: 5,
         active: [7],
         quantity: 6,
+        iconImage: 'Factory.png',
         color: 'green'
     },
     {
@@ -158,6 +169,7 @@ export const startingEstablishments = [
         cost: 3,
         active: [8],
         quantity: 6,
+        iconImage: 'Factory.png',
         color: 'green'
     },
     {
@@ -168,6 +180,7 @@ export const startingEstablishments = [
         cost: 6,
         active: [9],
         quantity: 6,
+        iconImage: 'Gear.png',
         color: 'blue'
     },
     {
@@ -178,7 +191,8 @@ export const startingEstablishments = [
         cost: 3,
         active: [9, 10],
         quantity: 6,
-        color: 'blue'
+        iconImage: 'Cup.png',
+        color: 'red'
     },
     {
         title: 'Apple Orchard (Metro Stop)',
@@ -188,6 +202,7 @@ export const startingEstablishments = [
         cost: 3,
         active: [10],
         quantity: 6,
+        iconImage: 'Wheat.png',
         color: 'blue'
     },
     {
@@ -198,6 +213,7 @@ export const startingEstablishments = [
         cost: 2,
         active: [11, 12],
         quantity: 6,
+        iconImage: 'Fruit.png',
         color: 'green'
     }
 ];
