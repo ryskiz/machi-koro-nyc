@@ -8,10 +8,12 @@ let Menu = require('react-burger-menu').push;
 import Board from './Board';
 import socketListen from '../sockets';
 
+
 const App = connect(
     ({game}) => ({game})
 )(
     ({game, children}) =>
+
         <div>
             <MenuWrap wait={20}>
                 <Menu id="menu" pageWrapId={'page-wrap'} outerContainerId={'outer-container'} right>
