@@ -13,6 +13,8 @@ import {
     receivingMoney
 } from '../reducers/gameReducer'
 import Dice from './Dice';
+import Card from './Card'
+import { SpringGrid } from 'react-stonecutter';
 
 
 class Board extends React.Component {
@@ -81,6 +83,7 @@ class Board extends React.Component {
             })[0];
 
         let items = this.props.game.cardsOnField;
+
         return (
             <div>
                 <div className="container">
@@ -199,7 +202,68 @@ class Board extends React.Component {
                                     }
                                 </div>
                             </div>
-                    }
+                          }
+                        </div>
+                        <div className="container">
+                          <div className="row">
+                            <SpringGrid
+                              component="ul"
+                              columns={5}
+                              columnWidth={150}
+                              gutterWidth={5}
+                              gutterHeight={5}
+                              itemHeight={200}
+                              springConfig={{ stiffness: 170, damping: 26 }}
+                              >
+                              {
+                                client.cardsInPossession && client.cardsInPossession.filter(card => card.quantity > 0).map(card => (
+                                  <div className="col-md-2 well itemcontainer" key={card.id}>
+                                      <div className="">
+                                          <div className="itemcontainernamecont">
+                                              <h4 >
+                                                  <div>
+                                                      {
+                                                          card.active[1] ?
+                                                              <h5>{card.active[0]}-{card.active[1]}</h5> :
+                                                              <h5>{card.active[0]}</h5>
+                                                      }
+                                                  </div>
+                                              </h4>
+                                              <div id="">
+                                                  Quantity: {card.quantity}
+                                              </div>
+                                              <div id="">
+                                                  {card.subtitle}
+                                              </div>
+                                              <div>
+                                                  {
+                                                      card.quantity === 0 ?
+                                                          <button type="button"
+                                                                  className="btn btn-primary disabled">
+                                                              None
+                                                              Left</button>
+                                                          :
+                                                          <div onClick={(evt) => {
+                                                              if (client && client.isTurn) {
+                                                                  this.onBuyClick(card.id, evt)
+                                                              } else {
+                                                                  alert("IT'S NOT YOUR TURN!")
+                                                              }
+                                                          }}
+                                                               className="coin-container">
+                                                              <div className="coin gold">
+                                                                  <p>{card.cost}</p>
+                                                              </div>
+                                                          </div>
+                                                  }
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                ))
+                              }
+                            </SpringGrid>
+                          </div>
                 </div>
             </div>
         )
