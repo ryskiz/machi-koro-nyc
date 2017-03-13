@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {Router, Route, IndexRedirect, browserHistory} from 'react-router';
 import {purchaseEstablishment, allPlayers} from '../basestuff';
 
@@ -9,9 +9,9 @@ import Board from './Board';
 import socketListen from '../sockets';
 
 const App = connect(
-    ({ game }) => ({ game })
+    ({game}) => ({game})
 )(
-    ({ game, children }) =>
+    ({game, children}) =>
         <div>
             <MenuWrap wait={20}>
                 <Menu id="menu" pageWrapId={'page-wrap'} outerContainerId={'outer-container'} right>
@@ -19,7 +19,22 @@ const App = connect(
                     {
                         game.players.length && game.players.map((player) => {
                             return (
-                                <a href="#">Player {player.index + 1}</a>
+                                <div>
+                                    <h1>Player {player.index + 1}</h1>
+                                    <h4>Cash: {player.wallet}</h4>
+                                    <h4>------------</h4>
+                                    {
+                                        player.cardsInPossession.map((card) => {
+                                            if (card.quantity > 0) {
+                                                return (
+                                                    <div>
+                                                        <h5>{card.title}x{card.quantity}</h5>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    }
+                                </div>
                             )
                         })
                     }
@@ -34,14 +49,14 @@ const App = connect(
 socketListen(socket)
 
 const Routes = (props) => {
-  return (
-      <Router history={browserHistory}>
-          <Route path="/" component={App}>
-              <IndexRedirect to="/board" />
-              <Route path="/board" component={Board}/>
-          </Route>
-      </Router>
-  );
+    return (
+        <Router history={browserHistory}>
+            <Route path="/" component={App}>
+                <IndexRedirect to="/board"/>
+                <Route path="/board" component={Board}/>
+            </Route>
+        </Router>
+    );
 };
 
 
