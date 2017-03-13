@@ -17,12 +17,12 @@ const App = connect(
         <div>
             <MenuWrap wait={20}>
                 <Menu id="menu" pageWrapId={'page-wrap'} outerContainerId={'outer-container'} right>
-                    <h1>Players</h1>
+                  <div className="sidebar">
                     {
                         game.players.length && game.players.map((player) => {
                             return (
                                 <div>
-                                    <h1>Player {player.index + 1}</h1>
+                                    <h3>Player {player.index + 1}</h3>
                                     <h4>Cash: {player.wallet}</h4>
                                     <h4>------------</h4>
                                     {
@@ -40,6 +40,7 @@ const App = connect(
                             )
                         })
                     }
+                  </div>
                 </Menu>
             </MenuWrap>
             <main id="page-wrap">
